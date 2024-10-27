@@ -2,6 +2,12 @@ venv/
 node_modules/
 ./infoviz/*.csv
 *.csv
-
+*.nc
+dotnc/
 
 # git rm -r --cached node_modules
+
+
+# https://plotly.com/python/parallel-coordinates-plot/
+# https://plotly.com/python/network-graphs/
+# https://plotly.com/python/colorscales/#:~:text=sepal_length%20sepal_width%20sepal_length-,Constructing%20a%20Discrete%20or%20Discontinuous%20Color%20Scale,colors%2C%20like%20Parallel%20Coordinates%20plots.
