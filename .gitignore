@@ -1,0 +1,7 @@
+venv/
+node_modules/
+./infoviz/*.csv
+*.csv
+
+
+# git rm -r --cached node_modules
