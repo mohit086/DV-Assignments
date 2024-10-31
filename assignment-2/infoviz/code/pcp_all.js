@@ -138,4 +138,5 @@ Promise.all([
     };
 
     Plotly.newPlot('plotall', data, layout);
+    Plotly.newPlot('selfplot', data, layout);
 }).catch(error => console.error('Error loading data:', error));
