@@ -39,7 +39,7 @@ npm i live-server
 Now navigate to the root directory of the project and type live-server
 Click on the link to see the directory structure
 click on assignment-2 > infoviz > code > pcp_variant1.html to see the first three plots and similarly pcp_variant2.html to see the next three plots
-The plots are explained in the report
+The plots, their interactions and uses are explained in the report
 The images of the plots are also present in the images directory
 
 #### Treemaps

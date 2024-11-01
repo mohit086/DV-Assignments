@@ -1,1 +1,5 @@
 venv/
+assignment-2/sciviz/data/*.nc
+assignment-2/infoviz/data/*.csv
+assignment-2/infoviz/data/*.gexf
+dump/
