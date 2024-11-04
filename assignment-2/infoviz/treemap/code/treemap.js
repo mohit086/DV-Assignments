@@ -18,23 +18,22 @@ const DYNASTY_TRANSLATIONS = {
 };
 
 const DYNASTY_COLORS = {
-  "Qing": "#FF0000",
-  "Tang": "#43FF00",
-  "Northern Song": "#43FF00",
-  "Ming": "#FFC90E",
+  Qing: "#FF0000",
+  Tang: "#43FF00",
+  "Northern Song": "#0002B0",
+  Ming: "#FFC90E",
   "Southern Song": "#650091",
   "Five Dynasties and Ten Kingdoms": "#72B300",
   "Ming-Qing": "#5E3500",
-  "Yuan": "#FFB077",
-  "Sui": "#007061",
+  Yuan: "#FFB077",
+  Sui: "#007061",
   "Liu Song": "#F354FF",
   "Southern Liang": "#97FFDB",
   "Southern Qi": "#46611B",
   "Eastern Jin": "#5C79FF",
-  "Song": "#AD1F78",
-  "Chen": "#FFFA88"
-}
-
+  Song: "#AD1F78",
+  Chen: "#FFFA88",
+};
 
 // Gender color scheme
 const GENDER_COLORS = {
@@ -126,11 +125,10 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
   return plotlyData;
 }
 
-// Layout configuration
 const layout = {
-  width: 1100,
-  height: 600,
-  margin: { l: 0, r: 20, t: 30, b: 0 },
+  width: "70%",
+  height: "100%",
+  margin: { l: 10, r: 20, t: 40, b: 10 },
   title: {
     text: "Chinese Buddhist Figures by Dynasty",
     x: 0.5,
@@ -141,49 +139,60 @@ const layout = {
     bordercolor: "#000000",
     font: { family: "Arial", size: 12 },
   },
+  autosize: true,
 };
 
-// Create legend
-function createLegend(nodesData) {
-  const legendDiv = document.getElementById("nationalityLegend");
-  legendDiv.innerHTML = ""; // Clear existing legend
-
-  if (currentView === "nationality") {
-    [...new Set(nodesData.map((d) => d.nationality))].forEach((nationality) => {
-      const legendItem = document.createElement("div");
-      legendItem.className = "legend-item";
-
-      const colorBox = document.createElement("div");
-      colorBox.className = "legend-color";
-      colorBox.style.backgroundColor =
-        DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
-
-      const label = document.createElement("span");
-      label.textContent = DYNASTY_TRANSLATIONS[nationality] || nationality;
-
-      legendItem.appendChild(colorBox);
-      legendItem.appendChild(label);
-      legendDiv.appendChild(legendItem);
-    });
-  } else {
-    // Gender legend
-    Object.entries(GENDER_COLORS).forEach(([gender, color]) => {
-      const legendItem = document.createElement("div");
-      legendItem.className = "legend-item";
-
-      const colorBox = document.createElement("div");
-      colorBox.className = "legend-color";
-      colorBox.style.backgroundColor = color;
-
-      const label = document.createElement("span");
-      label.textContent = gender === "1" ? "Male" : "Female";
-
-      legendItem.appendChild(colorBox);
-      legendItem.appendChild(label);
-      legendDiv.appendChild(legendItem);
-    });
-  }
+function resizeVisualization() {
+  const container = document.getElementById("treemap").parentElement;
+  Plotly.relayout("treemap", {
+    width: container.offsetWidth,
+    height: container.offsetHeight,
+  });
 }
+
+window.addEventListener("resize", resizeVisualization);
+
+// Create legend
+// function createLegend(nodesData) {
+//   const legendDiv = document.getElementById("nationalityLegend");
+//   legendDiv.innerHTML = ""; // Clear existing legend
+
+//   if (currentView === "nationality") {
+//     [...new Set(nodesData.map((d) => d.nationality))].forEach((nationality) => {
+//       const legendItem = document.createElement("div");
+//       legendItem.className = "legend-item";
+
+//       const colorBox = document.createElement("div");
+//       colorBox.className = "legend-color";
+//       colorBox.style.backgroundColor =
+//         DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
+
+//       const label = document.createElement("span");
+//       label.textContent = DYNASTY_TRANSLATIONS[nationality] || nationality;
+
+//       legendItem.appendChild(colorBox);
+//       legendItem.appendChild(label);
+//       legendDiv.appendChild(legendItem);
+//     });
+//   } else {
+//     // Gender legend
+//     Object.entries(GENDER_COLORS).forEach(([gender, color]) => {
+//       const legendItem = document.createElement("div");
+//       legendItem.className = "legend-item";
+
+//       const colorBox = document.createElement("div");
+//       colorBox.className = "legend-color";
+//       colorBox.style.backgroundColor = color;
+
+//       const label = document.createElement("span");
+//       label.textContent = gender === "1" ? "Male" : "Female";
+
+//       legendItem.appendChild(colorBox);
+//       legendItem.appendChild(label);
+//       legendDiv.appendChild(legendItem);
+//     });
+//   }
+// }
 
 // Handle click events
 function handleClick(eventData) {
@@ -210,7 +219,7 @@ function handleClick(eventData) {
     // Update visualization
     const plotlyData = createTreemap(globalNodesData, "gender", nationalityKey);
     Plotly.react("treemap", plotlyData, layout);
-    createLegend(globalNodesData);
+    // createLegend(globalNodesData);
 
     // Add back button
     addBackButton();
@@ -243,7 +252,7 @@ function addBackButton() {
 
       const plotlyData = createTreemap(globalNodesData, "nationality");
       Plotly.react("treemap", plotlyData, layout);
-      createLegend(globalNodesData);
+      // createLegend(globalNodesData);
 
       backButton.remove();
     });
@@ -258,11 +267,12 @@ function initVisualization() {
     .then(([nodesData, edgesData]) => {
       globalNodesData = nodesData;
       const plotlyData = createTreemap(nodesData, "nationality");
-      createLegend(nodesData);
+      // createLegend(nodesData);
 
       // Create treemap with click handler
       Plotly.newPlot("treemap", plotlyData, layout).then((gd) => {
         gd.on("plotly_click", handleClick);
+        resizeVisualization(); // Initial resize
       });
     })
     .catch((error) => console.error("Error loading data:", error));
