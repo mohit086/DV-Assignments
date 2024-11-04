@@ -18,6 +18,25 @@ const dynasty_translations = {
     '南齊': 'Southern Qi'
 };
 
+
+const DYNASTY_COLORS = {
+    "Qing": "#FF0000",
+    "Tang": "#43FF00",
+    "Northern Song": "#0002B0",
+    "Ming": "#FFC90E",
+    "Southern Song": "#650091",
+    "Five Dynasties and Ten Kingdoms": "#72B300",
+    "Ming-Qing": "#5E3500",
+    "Yuan": "#FFB077",
+    "Sui": "#007061",
+    "Liu Song": "#F354FF",
+    "Southern Liang": "#97FFDB",
+    "Southern Qi": "#46611B",
+    "Eastern Jin": "#5C79FF",
+    "Song": "#AD1F78",
+    "Chen": "#FFFA88",
+};
+
 Promise.all([
     d3.csv('../../data/nodes.csv'),
     d3.csv('../../data/edges.csv')
@@ -41,7 +60,7 @@ Promise.all([
             selfinteractionCounts[u_nationality] = (selfinteractionCounts[u_nationality] || 0) + 1;
         } else {
             crossinteractionCounts[u_nationality] = (crossinteractionCounts[u_nationality] || 0) + 1;
-            crossinteractionCounts[v_nationality] = (crossinteractionCounts[v_nationality] || 0) + 1;
+            crossinteractionCounts[v_nationality] = (crossinteractionCounts[v_nationality] || 0) + 1; // here nationality is a chinese string
         }
     });
 
@@ -70,10 +89,14 @@ Promise.all([
         nationalityStats[nationality].crossInteractions = cross_nationality_interactions;
     });
 
+    // console.log('nationalityStats is', nationalityStats)
     // Calculate averages
     const nationalityAverages = Object.entries(nationalityStats).map(([nationality, stats]) => {
+        // console.log(nationality, stats);
+        //the nationality here is still in chinese
         return {
             nationality: nationality,
+            // nationality_chinese_text: nationality,
             midBirthY: (stats.minBirthYear + stats.maxBirthYear) / 2,
             maxBirthY: stats.maxBirthYear,
             meanBirthY: stats.meanBirthYear,
@@ -83,31 +106,66 @@ Promise.all([
         };
     });
 
+    // console.log(nationalityAverages)
+
     // Sort by median birth year
     nationalityAverages.sort((a, b) => d3.ascending(a.meanBirthY, b.meanBirthY));
+
+    // console.log('nationalityAverages.length is ', nationalityAverages.length)
+
+    function generate_color_scale(){
+        let reverseMap = {}
+        let len1 = 0
+        //nationalityAverages is an array
+        nationalityAverages.map((val, idx) => {
+            reverseMap[idx] = val;
+            // console.log(reverseMap[idx].nationality)
+            len1 += 1
+        });
+        
+        len1-=1
+        const ans = [];
+        const step = 1 / len1;
+        let j = 0
+         let i=0
+        nationalityAverages.map((val, idx)=>{
+            //using idx obtain req_str
+            req_obj= reverseMap[idx]
+            req_str = req_obj.nationality
+            let arr = []
+            arr = [j.toFixed(2), DYNASTY_COLORS[dynasty_translations[req_str] || 'black']]
+            j += step
+            ans.push(arr)
+             i+=1;
+        })
+        return ans;
+
+    }
 
     // Prepare data for the plots
     const baseTrace = {
         type: 'parcoords',
         line: {
-            color: nationalityAverages.map((_, idx) => idx),
-            colorscale: [
-                [0.0, 'red'],
-                [0.07, 'orange'],
-                [0.14, 'yellow'],
-                [0.21, 'lightgreen'],
-                [0.28, 'green'],
-                [0.35, 'cyan'],
-                [0.42, 'blue'],
-                [0.49, 'darkblue'],
-                [0.56, 'purple'],
-                [0.63, 'violet'],
-                [0.70, 'magenta'],
-                [0.77, 'pink'],
-                [0.84, 'lightgrey'],
-                [0.91, 'grey'],
-                [0.98, 'black']
-            ],
+            color: nationalityAverages.map((val, idx) => idx),
+            // color: Object.keys(nationalityStats),
+            // colorscale: [
+            //     [0.0, 'red'],
+            //     [0.07, 'orange'],
+            //     [0.14, 'yellow'],
+            //     [0.21, 'lightgreen'],
+            //     [0.28, 'green'],
+            //     [0.35, 'cyan'],
+            //     [0.42, 'blue'],
+            //     [0.49, 'darkblue'],
+            //     [0.56, 'purple'],
+            //     [0.63, 'violet'],
+            //     [0.70, 'magenta'],
+            //     [0.77, 'pink'],
+            //     [0.84, 'lightgrey'],
+            //     [0.91, 'grey'],
+            //     [0.98, 'black']
+            // ],
+            colorscale: generate_color_scale()
         },
     };
 
@@ -145,3 +203,4 @@ Promise.all([
     Plotly.newPlot('selfplot', data2, layout);
     Plotly.newPlot('crossplot', data3, layout);
 }).catch(error => console.error('Error loading data:', error));
+

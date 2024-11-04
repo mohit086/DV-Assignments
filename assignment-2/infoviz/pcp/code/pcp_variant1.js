@@ -24,6 +24,24 @@ const dynasty_translations = {
 '南齊': 'Southern Qi'
 };
 
+const DYNASTY_COLORS = {
+    "Qing": "#FF0000",
+    "Tang": "#43FF00",
+    "Northern Song": "#0002B0",
+    "Ming": "#FFC90E",
+    "Southern Song": "#650091",
+    "Five Dynasties and Ten Kingdoms": "#72B300",
+    "Ming-Qing": "#5E3500",
+    "Yuan": "#FFB077",
+    "Sui": "#007061",
+    "Liu Song": "#F354FF",
+    "Southern Liang": "#97FFDB",
+    "Southern Qi": "#46611B",
+    "Eastern Jin": "#5C79FF",
+    "Song": "#AD1F78",
+    "Chen": "#FFFA88",
+};
+
 let j=1;
 for (let i=0; i<=4; i+=2){
 Promise.all([
@@ -71,13 +89,11 @@ Promise.all([
        return (nationality_BirthYearMap[a] - nationality_BirthYearMap[b]) 
    })
 
-   // console.log(nationality_BirthYearMap)
-   
-   // console.log('after sort', nationalities_arr)
+//  nationalities_arr contains the sorted nationalities   
 
    
-   // const nationalityMap = new Map(nationalities.map((nat, idx) => [nat, idx]));
-   const nationalityMap = new Map(nationalities_arr.map((el, idx) => [el, idx]))
+   const nationalityMap = new Map(nationalities_arr.map((el, idx) => [el, idx])); 
+   console.log(nationalityMap) //Maps a nationality to a number
    
    nodesData.forEach(node => {
        node.nationality = nationalityMap.get(node.nationality);
@@ -92,20 +108,33 @@ Promise.all([
        const ans = [];
        const step = 1 / len1;
        let j = 0
-       for(let i=0; i < nationalityMap.size; i++){
-           let arr = []
-           arr = [j.toFixed(2), all_colors[i]]
+    //    for(let i=0; i < nationalityMap.size; i++){
+    //        let arr = []
+    //        arr = [j.toFixed(2), all_colors[i]]
+    //        j += step
+    //        ans.push(arr)
+    //    }
+        let i=0
+          for(let [key, value] of nationalityMap){
+            let arr = []
+           arr = [j.toFixed(2), DYNASTY_COLORS[dynasty_translations[key]]]
            j += step
            ans.push(arr)
-       }
+            i+=1;
+          }
        return ans;
    }
+
+
+
    // Create the parallel coordinates plot
    const trace = {
        type: 'parcoords',
        line: {
-           color: nodesData.map(node => node.nationality),
-           colorscale: generate_color_scale(all_colors, nationalityMap.size),
+        //    color: nodesData.map(node => node.nationality),
+        color: nodesData.map(node => DYNASTY_COLORS[dynasty_translations[node.nationality]]),
+        //    colorscale: generate_color_scale(all_colors, nationalityMap.size),
+            // colorscale: ['red', 'green', 'blue', 'orange', 'pink', 'cyan', 'violet', 'yellow', 'olive',  'brown', 'black', 'magenta'],
        },
        dimensions: [
            { label: 'Nationality', values: nodesData.map(node => node.nationality),
