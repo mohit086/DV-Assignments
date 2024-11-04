@@ -18,22 +18,23 @@ const DYNASTY_TRANSLATIONS = {
 };
 
 const DYNASTY_COLORS = {
-  "Qing": "#FF6B6B",
-  "Ming": "#4ECDC4",
-  "Tang": "#556270",
-  "Southern Song": "#FFD700",
-  "Ming Qing": "#FF8C00",
-  "Yuan": "#8A2BE2",
-  "Northern Song": "#FF4500",
-  "Song": "#00CED1",
-  "Five Dynasties": "#7FFF00",
-  "Sui": "#FF1493",
-  "Chen": "#9400D3",
-  "Eastern Jin": "#FFDAB9",
-  "Southern Liang": "#6495ED",
-  "Liu Song": "#32CD32",
-  "Southern Qi": "#FF00FF"
+  "Qing": "#FF7540",                         // 清
+  "Tang": "#B0FF50",                         // 唐
+  "Northern Song": "#749AFF",                // 北宋
+  "Song": "#FF73F8",                         // 宋
+  "Southern Song": "#FFE747",                // 南宋
+  "Five Dynasties and Ten Kingdoms": "#0FF200", // 五代十國
+  "Ming Qing": "#78F2EA",                    // 明 清
+  "Yuan": "#9500FF",                         // 元
+  "Sui": "#A3A651",                          // 隋
+  "Liu Song": "#BA713D",                     // 劉宋
+  "Southern Liang": "#FF0013",               // 南梁
+  "Southern Qi": "#0300FF",                  // 南齊
+  "Eastern Jin": "#F5D1AE",                  // 東晉
+  "Song (duplicate color)": "#0FA600",       // 南宋 (duplicate)
+  "Chen": "#CDB3FF"                          // 陳
 };
+
 // Gender color scheme
 const GENDER_COLORS = {
   1: "#3339ff",
