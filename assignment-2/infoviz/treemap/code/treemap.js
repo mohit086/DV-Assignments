@@ -18,22 +18,23 @@ const DYNASTY_TRANSLATIONS = {
 };
 
 const DYNASTY_COLORS = {
-  Qing: "#FF7540",
-  Ming: "#FF73F8",
-  Tang: "#B0FF50",
-  "Southern Song": "#FFE847",
-  "Ming-Qing": "#78F2EA",
-  Yuan: "#9500FF",
-  "Northern Song": "#749AFF",
-  Song: "#0FA600",
-  "Five Dynasties and Ten Kingdoms": "#0FF200",
-  Sui: "#A3A651",
-  Chen: "#CDB3FF",
-  "Eastern Jin": "#F5D1AE",
-  "Southern Liang": "#FF0013",
-  "Liu Song": "#BA713D",
-  "Southern Qi": "#0300FF",
-};
+  "Qing": "#FF0000",
+  "Tang": "#43FF00",
+  "Northern Song": "#43FF00",
+  "Ming": "#FFC90E",
+  "Southern Song": "#650091",
+  "Five Dynasties and Ten Kingdoms": "#72B300",
+  "Ming-Qing": "#5E3500",
+  "Yuan": "#FFB077",
+  "Sui": "#007061",
+  "Liu Song": "#F354FF",
+  "Southern Liang": "#97FFDB",
+  "Southern Qi": "#46611B",
+  "Eastern Jin": "#5C79FF",
+  "Song": "#AD1F78",
+  "Chen": "#FFFA88"
+}
+
 
 // Gender color scheme
 const GENDER_COLORS = {
