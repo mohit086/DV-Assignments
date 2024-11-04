@@ -2,7 +2,7 @@
 
 Ensure you have the required libraries -
 
-`pip install xarray matplotlib numpy pandas imageio basemap`
+`pip install xarray matplotlib numpy pandas imageio basemap scipy`
 
 ### Sciviz
 
