@@ -18,21 +18,21 @@ const DYNASTY_TRANSLATIONS = {
 };
 
 const DYNASTY_COLORS = {
-  "Qing": "#FF6B6B",
-  "Ming": "#4ECDC4",
-  "Tang": "#556270",
-  "Southern Song": "#FFD700",
-  "Ming Qing": "#FF8C00",
-  "Yuan": "#8A2BE2",
-  "Northern Song": "#FF4500",
-  "Song": "#00CED1",
-  "Five Dynasties": "#7FFF00",
-  "Sui": "#FF1493",
-  "Chen": "#9400D3",
-  "Eastern Jin": "#FFDAB9",
-  "Southern Liang": "#6495ED",
-  "Liu Song": "#32CD32",
-  "Southern Qi": "#FF00FF"
+  "Qing": "#FF7540",
+  "Ming": "#FF73F8",
+  "Tang": "#B0FF50",
+  "Southern Song": "#FFE847",
+  "Ming-Qing": "#78F2EA",
+  "Yuan": "#9500FF",
+  "Northern Song": "#749AFF",
+  "Song": "#0FA600",
+  "Five Dynasties and Ten Kingdoms": "#0FF200",
+  "Sui": "#A3A651",
+  "Chen": "#CDB3FF",
+  "Eastern Jin": "#F5D1AE",
+  "Southern Liang": "#FF0013",
+  "Liu Song": "#BA713D",
+  "Southern Qi": "#0300FF",
 };
 // Gender color scheme
 const GENDER_COLORS = {
@@ -113,8 +113,10 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
     if (parent === "") return "#ffffff"; // root
     if (view === "nationality") {
       // Find original key from translation
-      const originalKey = Object.keys(DYNASTY_TRANSLATIONS)
-        .find(key => DYNASTY_TRANSLATIONS[key] === label) || label;
+      const originalKey =
+        Object.keys(DYNASTY_TRANSLATIONS).find(
+          (key) => DYNASTY_TRANSLATIONS[key] === label
+        ) || label;
       return DYNASTY_COLORS[DYNASTY_TRANSLATIONS[originalKey]] || "#bdbdbd";
     }
     return GENDER_COLORS[label] || "#bdbdbd"; // gender level
@@ -151,7 +153,8 @@ function createLegend(nodesData) {
 
       const colorBox = document.createElement("div");
       colorBox.className = "legend-color";
-      colorBox.style.backgroundColor = DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
+      colorBox.style.backgroundColor =
+        DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
 
       const label = document.createElement("span");
       label.textContent = DYNASTY_TRANSLATIONS[nationality] || nationality;
@@ -186,7 +189,10 @@ function handleClick(eventData) {
 
   const point = eventData.points[0];
 
-  if (currentView === "nationality" && point.parent === "Chinese Buddhist Figures") {
+  if (
+    currentView === "nationality" &&
+    point.parent === "Chinese Buddhist Figures"
+  ) {
     // Find the original nationality key
     const nationalityKey =
       Object.keys(DYNASTY_TRANSLATIONS).find(
