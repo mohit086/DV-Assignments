@@ -17,10 +17,27 @@ const DYNASTY_TRANSLATIONS = {
   南齊: "Southern Qi",
 };
 
+const DYNASTY_COLORS = {
+  "Qing": "#FF6B6B",
+  "Ming": "#4ECDC4",
+  "Tang": "#556270",
+  "Southern Song": "#FFD700",
+  "Ming Qing": "#FF8C00",
+  "Yuan": "#8A2BE2",
+  "Northern Song": "#FF4500",
+  "Song": "#00CED1",
+  "Five Dynasties": "#7FFF00",
+  "Sui": "#FF1493",
+  "Chen": "#9400D3",
+  "Eastern Jin": "#FFDAB9",
+  "Southern Liang": "#6495ED",
+  "Liu Song": "#32CD32",
+  "Southern Qi": "#FF00FF"
+};
 // Gender color scheme
 const GENDER_COLORS = {
-  1: "#2171b5",
-  2: "#6baed6",
+  1: "#3339ff",
+  2: "#ff77fb",
 };
 
 let currentView = "nationality"; // Track current view state
@@ -36,7 +53,7 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
   let hierarchyData;
   if (view === "nationality") {
     hierarchyData = {
-      name: "Buddhist Figures",
+      name: "Chinese Buddhist Figures",
       children: Array.from(groupedByNationality, ([nationality, nodes]) => ({
         name: nationality,
         displayName: DYNASTY_TRANSLATIONS[nationality] || nationality,
@@ -90,35 +107,34 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
   processNode(hierarchyData);
 
   // Create color scheme
-  const nationalityColors = d3
-    .scaleOrdinal()
-    .domain([...new Set(nodesData.map((d) => d.nationality))])
-    .range(d3.schemeSet3);
-
   // Apply colors
   plotlyData[0].marker.colors = plotlyData[0].labels.map((label, i) => {
     const parent = plotlyData[0].parents[i];
     if (parent === "") return "#ffffff"; // root
-    if (view === "nationality") return nationalityColors(label);
+    if (view === "nationality") {
+      // Find original key from translation
+      const originalKey = Object.keys(DYNASTY_TRANSLATIONS)
+        .find(key => DYNASTY_TRANSLATIONS[key] === label) || label;
+      return DYNASTY_COLORS[DYNASTY_TRANSLATIONS[originalKey]] || "#bdbdbd";
+    }
     return GENDER_COLORS[label] || "#bdbdbd"; // gender level
   });
-
   return plotlyData;
 }
 
 // Layout configuration
 const layout = {
   width: 1100,
-  height: 700,
-  margin: { l: 0, r: 0, t: 30, b: 0 },
+  height: 600,
+  margin: { l: 0, r: 20, t: 30, b: 0 },
   title: {
-    text: "Buddhist Figures by Dynasty",
+    text: "Chinese Buddhist Figures by Dynasty",
     x: 0.5,
     y: 0.98,
   },
   hoverlabel: {
     bgcolor: "white",
-    bordercolor: "#ddd",
+    bordercolor: "#000000",
     font: { family: "Arial", size: 12 },
   },
 };
@@ -129,18 +145,13 @@ function createLegend(nodesData) {
   legendDiv.innerHTML = ""; // Clear existing legend
 
   if (currentView === "nationality") {
-    const nationalityColors = d3
-      .scaleOrdinal()
-      .domain([...new Set(nodesData.map((d) => d.nationality))])
-      .range(d3.schemeSet3);
-
     [...new Set(nodesData.map((d) => d.nationality))].forEach((nationality) => {
       const legendItem = document.createElement("div");
       legendItem.className = "legend-item";
 
       const colorBox = document.createElement("div");
       colorBox.className = "legend-color";
-      colorBox.style.backgroundColor = nationalityColors(nationality);
+      colorBox.style.backgroundColor = DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
 
       const label = document.createElement("span");
       label.textContent = DYNASTY_TRANSLATIONS[nationality] || nationality;
@@ -175,7 +186,7 @@ function handleClick(eventData) {
 
   const point = eventData.points[0];
 
-  if (currentView === "nationality" && point.parent === "Buddhist Figures") {
+  if (currentView === "nationality" && point.parent === "Chinese Buddhist Figures") {
     // Find the original nationality key
     const nationalityKey =
       Object.keys(DYNASTY_TRANSLATIONS).find(
@@ -220,7 +231,7 @@ function addBackButton() {
     backButton.addEventListener("click", () => {
       currentView = "nationality";
       selectedNationality = null;
-      layout.title.text = "Buddhist Figures by Dynasty";
+      layout.title.text = "Chinese Buddhist Figures by Dynasty";
 
       const plotlyData = createTreemap(globalNodesData, "nationality");
       Plotly.react("treemap", plotlyData, layout);
@@ -252,6 +263,12 @@ function initVisualization() {
 // Add necessary CSS
 const style = document.createElement("style");
 style.textContent = `
+  #nationalityLegend {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    padding: 10px;
+  }
   .legend-item {
     display: flex;
     align-items: center;
