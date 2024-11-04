@@ -18,6 +18,7 @@ const DYNASTY_TRANSLATIONS = {
 };
 
 const DYNASTY_COLORS = {
+<<<<<<< HEAD
   "Qing": "#FF7540",                         // 清
   "Tang": "#B0FF50",                         // 唐
   "Northern Song": "#749AFF",                // 北宋
@@ -33,6 +34,23 @@ const DYNASTY_COLORS = {
   "Eastern Jin": "#F5D1AE",                  // 東晉
   "Song (duplicate color)": "#0FA600",       // 南宋 (duplicate)
   "Chen": "#CDB3FF"                          // 陳
+=======
+  "Qing": "#FF7540",
+  "Ming": "#FF73F8",
+  "Tang": "#B0FF50",
+  "Southern Song": "#FFE847",
+  "Ming-Qing": "#78F2EA",
+  "Yuan": "#9500FF",
+  "Northern Song": "#749AFF",
+  "Song": "#0FA600",
+  "Five Dynasties and Ten Kingdoms": "#0FF200",
+  "Sui": "#A3A651",
+  "Chen": "#CDB3FF",
+  "Eastern Jin": "#F5D1AE",
+  "Southern Liang": "#FF0013",
+  "Liu Song": "#BA713D",
+  "Southern Qi": "#0300FF",
+>>>>>>> 1ba6b1170130886c2bddaf3c002afdc449199c59
 };
 
 // Gender color scheme
@@ -114,8 +132,10 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
     if (parent === "") return "#ffffff"; // root
     if (view === "nationality") {
       // Find original key from translation
-      const originalKey = Object.keys(DYNASTY_TRANSLATIONS)
-        .find(key => DYNASTY_TRANSLATIONS[key] === label) || label;
+      const originalKey =
+        Object.keys(DYNASTY_TRANSLATIONS).find(
+          (key) => DYNASTY_TRANSLATIONS[key] === label
+        ) || label;
       return DYNASTY_COLORS[DYNASTY_TRANSLATIONS[originalKey]] || "#bdbdbd";
     }
     return GENDER_COLORS[label] || "#bdbdbd"; // gender level
@@ -152,7 +172,8 @@ function createLegend(nodesData) {
 
       const colorBox = document.createElement("div");
       colorBox.className = "legend-color";
-      colorBox.style.backgroundColor = DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
+      colorBox.style.backgroundColor =
+        DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
 
       const label = document.createElement("span");
       label.textContent = DYNASTY_TRANSLATIONS[nationality] || nationality;
@@ -187,7 +208,10 @@ function handleClick(eventData) {
 
   const point = eventData.points[0];
 
-  if (currentView === "nationality" && point.parent === "Chinese Buddhist Figures") {
+  if (
+    currentView === "nationality" &&
+    point.parent === "Chinese Buddhist Figures"
+  ) {
     // Find the original nationality key
     const nationalityKey =
       Object.keys(DYNASTY_TRANSLATIONS).find(
