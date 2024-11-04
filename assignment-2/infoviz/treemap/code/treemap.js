@@ -1,56 +1,38 @@
 // Dynasty translations mapping for display
 const DYNASTY_TRANSLATIONS = {
   清: "Qing",
-  明: "Ming",
   唐: "Tang",
+  北宋: "Northern Song",
+  明: "Ming",
   南宋: "Southern Song",
+  五代十國: "Five Dynasties and Ten Kingdoms",
   "明 清": "Ming-Qing",
   元: "Yuan",
-  北宋: "Northern Song",
-  宋: "Song",
-  五代十國: "Five Dynasties and Ten Kingdoms",
   隋: "Sui",
-  陳: "Chen",
-  東晉: "Eastern Jin",
-  南梁: "Southern Liang",
   劉宋: "Liu Song",
+  南梁: "Southern Liang",
   南齊: "Southern Qi",
+  東晉: "Eastern Jin",
+  宋: "Song",
+  陳: "Chen",
 };
 
 const DYNASTY_COLORS = {
-<<<<<<< HEAD
-  "Qing": "#FF7540",                         // 清
-  "Tang": "#B0FF50",                         // 唐
-  "Northern Song": "#749AFF",                // 北宋
-  "Song": "#FF73F8",                         // 宋
-  "Southern Song": "#FFE747",                // 南宋
-  "Five Dynasties and Ten Kingdoms": "#0FF200", // 五代十國
-  "Ming Qing": "#78F2EA",                    // 明 清
-  "Yuan": "#9500FF",                         // 元
-  "Sui": "#A3A651",                          // 隋
-  "Liu Song": "#BA713D",                     // 劉宋
-  "Southern Liang": "#FF0013",               // 南梁
-  "Southern Qi": "#0300FF",                  // 南齊
-  "Eastern Jin": "#F5D1AE",                  // 東晉
-  "Song (duplicate color)": "#0FA600",       // 南宋 (duplicate)
-  "Chen": "#CDB3FF"                          // 陳
-=======
-  "Qing": "#FF7540",
-  "Ming": "#FF73F8",
-  "Tang": "#B0FF50",
+  Qing: "#FF7540",
+  Ming: "#FF73F8",
+  Tang: "#B0FF50",
   "Southern Song": "#FFE847",
   "Ming-Qing": "#78F2EA",
-  "Yuan": "#9500FF",
+  Yuan: "#9500FF",
   "Northern Song": "#749AFF",
-  "Song": "#0FA600",
+  Song: "#0FA600",
   "Five Dynasties and Ten Kingdoms": "#0FF200",
-  "Sui": "#A3A651",
-  "Chen": "#CDB3FF",
+  Sui: "#A3A651",
+  Chen: "#CDB3FF",
   "Eastern Jin": "#F5D1AE",
   "Southern Liang": "#FF0013",
   "Liu Song": "#BA713D",
   "Southern Qi": "#0300FF",
->>>>>>> 1ba6b1170130886c2bddaf3c002afdc449199c59
 };
 
 // Gender color scheme
