@@ -44,6 +44,7 @@ const GENDER_COLORS = {
 let currentView = "nationality"; // Track current view state
 let selectedNationality = null; // Track selected nationality
 let globalNodesData = null; // Store nodes data globally
+let currentAlgorithm = "squarify";
 
 // Create the visualization
 function createTreemap(nodesData, view = "nationality", selectedNat = null) {
@@ -90,6 +91,9 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
         colors: [],
         line: { width: 2 },
       },
+      tiling:{
+        packing:currentAlgorithm
+      }
     },
   ];
 
@@ -261,6 +265,44 @@ function addBackButton() {
   }
 }
 
+// Add this function after your other functions
+function addAlgorithmSelector() {
+  const container = document.getElementById("treemap").parentElement;
+  
+  if (!document.getElementById("algoSelector")) {
+    const selector = document.createElement("select");
+    selector.id = "algoSelector";
+    selector.style.cssText = `
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 8px;
+      border-radius: 4px;
+    `;
+
+    const algorithms = [
+      { value: "squarify", text: "Squarify" },
+      { value: "binary", text: "Binary" },
+      { value: "slice-dice", text: "Slice & Dice" }
+    ];
+
+    algorithms.forEach(algo => {
+      const option = document.createElement("option");
+      option.value = algo.value;
+      option.textContent = algo.text;
+      selector.appendChild(option);
+    });
+
+    selector.addEventListener("change", (e) => {
+      currentAlgorithm = e.target.value;
+      const plotlyData = createTreemap(globalNodesData, currentView, selectedNationality);
+      Plotly.react("treemap", plotlyData, layout);
+    });
+
+    container.appendChild(selector);
+  }
+}
+
 // Main initialization function
 function initVisualization() {
   Promise.all([d3.csv("../../data/nodes.csv"), d3.csv("../../data/edges.csv")])
@@ -273,6 +315,7 @@ function initVisualization() {
       Plotly.newPlot("treemap", plotlyData, layout).then((gd) => {
         gd.on("plotly_click", handleClick);
         resizeVisualization(); // Initial resize
+        addAlgorithmSelector();
       });
     })
     .catch((error) => console.error("Error loading data:", error));
