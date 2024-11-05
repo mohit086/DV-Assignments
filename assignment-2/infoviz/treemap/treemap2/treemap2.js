@@ -36,9 +36,9 @@ const DYNASTY_COLORS = {
 };
 
 const periodColors = {
-  "0 - 800": "#ff9999",
-  "801 - 1400": "#99ff99",
-  "1401 - 2000": "#9999ff"
+  "0 - 800": "#fc03b6",
+  "801 - 1400": "#030ffc",
+  "1401 - 2000": "#09ad3a"
 };
 // Gender color scheme
 const GENDER_COLORS = {
@@ -89,9 +89,13 @@ function createTreemap(nodesData, view = "time_period", selectedPeriod = null) {
       values: [],
       textinfo: "label+value+percent parent",
       hovertemplate:
-        view === "time_period"
-          ? "Time Period: %{label}<br>Count: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
-          : "Dynasty: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
+      view === "time_period"
+        ? "Time Period: %{label}<br>Count: %{value:.1f}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
+        : "Dynasty: %{label}<br>Count: %{value:.1f}<br>Percentage: %{percentParent:.1%}<extra></extra>",
+      texttemplate:
+      view === "time_period"
+        ? "%{label}<br>%{value:.1f}<br>%{percentRoot:.1%}"
+        : "%{label}<br>%{value:.1f}<br>%{percentParent:.1%}",
       marker: {
         colors: [],
         line: { width: 2 },
@@ -281,7 +285,8 @@ function addAlgorithmSelector() {
     const algorithms = [
       { value: "squarify", text: "Squarify" },
       { value: "binary", text: "Binary" },
-      { value: "slice-dice", text: "Slice & Dice" },
+      { value: "slice", text: "Slice" },
+      { value: "dice", text: "Dice" },
     ];
 
     algorithms.forEach((algo) => {

@@ -37,12 +37,12 @@ const DYNASTY_COLORS = {
 
 const GENDER_MAPPING = {
   1: "Male",
-  2: "Female"
+  2: "Female",
 };
 // Gender color scheme
 const GENDER_COLORS = {
-  "Male": "#3339ff",
-  "Female": "#ff77fb",
+  Male: "#3339ff",
+  Female: "#ff77fb",
 };
 
 let currentView = "nationality"; // Track current view state
@@ -88,20 +88,20 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
       values: [],
       textinfo: "label+value+percent parent",
       hovertemplate:
-      view === "nationality"
-      ? "Dynasty: %{label}<br>Count: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
-      : "Gender: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
+        view === "nationality"
+          ? "Dynasty: %{label}<br>Count: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
+          : "Gender: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
       texttemplate:
-      view === "nationality"
-      ? "%{label}<br>%{value}<br>%{percentRoot:.1%}"
-      : "%{label}<br>%{value}<br>%{percentParent:.1%}",
+        view === "nationality"
+          ? "%{label}<br>%{value}<br>%{percentRoot:.1%}"
+          : "%{label}<br>%{value}<br>%{percentParent:.1%}",
       marker: {
         colors: [],
         line: { width: 2 },
       },
-      tiling:{
-        packing:currentAlgorithm
-      }
+      tiling: {
+        packing: currentAlgorithm,
+      },
     },
   ];
 
@@ -138,8 +138,8 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
 }
 
 const layout = {
-  width: "70%",
-  height: "100%",
+  width: 20,
+  height: 600,
   margin: { l: 10, r: 20, t: 40, b: 10 },
   title: {
     text: "Chinese Buddhist Figures by Dynasty",
@@ -276,7 +276,7 @@ function addBackButton() {
 // Add this function after your other functions
 function addAlgorithmSelector() {
   const container = document.getElementById("treemap").parentElement;
-  
+
   if (!document.getElementById("algoSelector")) {
     const selector = document.createElement("select");
     selector.id = "algoSelector";
@@ -291,10 +291,11 @@ function addAlgorithmSelector() {
     const algorithms = [
       { value: "squarify", text: "Squarify" },
       { value: "binary", text: "Binary" },
-      { value: "slice-dice", text: "Slice & Dice" }
+      { value: "slice", text: "Slice" },
+      { value: "dice", text: "Dice" },
     ];
 
-    algorithms.forEach(algo => {
+    algorithms.forEach((algo) => {
       const option = document.createElement("option");
       option.value = algo.value;
       option.textContent = algo.text;
@@ -303,7 +304,11 @@ function addAlgorithmSelector() {
 
     selector.addEventListener("change", (e) => {
       currentAlgorithm = e.target.value;
-      const plotlyData = createTreemap(globalNodesData, currentView, selectedNationality);
+      const plotlyData = createTreemap(
+        globalNodesData,
+        currentView,
+        selectedNationality
+      );
       Plotly.react("treemap", plotlyData, layout);
     });
 
