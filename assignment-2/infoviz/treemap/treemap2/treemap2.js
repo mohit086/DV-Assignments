@@ -1,40 +1,45 @@
 // Dynasty translations mapping for display
 const DYNASTY_TRANSLATIONS = {
-  清: "Qing",
-  唐: "Tang",
-  北宋: "Northern Song",
-  明: "Ming",
-  南宋: "Southern Song",
-  五代十國: "Five Dynasties and Ten Kingdoms",
-  "明 清": "Ming-Qing",
-  元: "Yuan",
-  隋: "Sui",
-  劉宋: "Liu Song",
-  南梁: "Southern Liang",
-  南齊: "Southern Qi",
-  東晉: "Eastern Jin",
-  宋: "Song",
-  陳: "Chen",
+  清: "Qing (清)",
+  唐: "Tang (唐)",
+  北宋: "Northern Song (北宋)",
+  明: "Ming (明)",
+  南宋: "Southern Song (南宋)",
+  五代十國: "Five Dynasties and Ten Kingdoms (五代十國)",
+  "明 清": "Ming-Qing (明清)",
+  元: "Yuan (元)",
+  隋: "Sui (隋)",
+  劉宋: "Liu Song (劉宋)",
+  南梁: "Southern Liang (南梁)",
+  南齊: "Southern Qi (南齊)",
+  東晉: "Eastern Jin (東晉)",
+  宋: "Song (宋)",
+  陳: "Chen (陳)",
 };
 
 const DYNASTY_COLORS = {
-  Qing: "#FF0000",
-  Tang: "#43FF00",
-  "Northern Song": "#0002B0",
-  Ming: "#FFC90E",
-  "Southern Song": "#650091",
-  "Five Dynasties and Ten Kingdoms": "#72B300",
-  "Ming-Qing": "#5E3500",
-  Yuan: "#FFB077",
-  Sui: "#007061",
-  "Liu Song": "#F354FF",
-  "Southern Liang": "#97FFDB",
-  "Southern Qi": "#46611B",
-  "Eastern Jin": "#5C79FF",
-  Song: "#AD1F78",
-  Chen: "#FFFA88",
+  "Qing (清)": "#FF0000",
+  "Tang (唐)": "#0002B0",
+  "Northern Song (北宋)": "#43FF00",
+  "Ming (明)": "#FFC90E",
+  "Southern Song (南宋)": "#650091",
+  "Five Dynasties and Ten Kingdoms (五代十國)": "#72B300",
+  "Ming-Qing (明清)": "#5E3500",
+  "Yuan (元)": "#FFB077",
+  "Sui (隋)": "#007061",
+  "Liu Song (劉宋)": "#F354FF",
+  "Southern Liang (南梁)": "#97FFDB",
+  "Southern Qi (南齊)": "#46611B",
+  "Eastern Jin (東晉)": "#5C79FF",
+  "Song (宋)": "#AD1F78",
+  "Chen (陳)": "#FFFA88",
 };
 
+const periodColors = {
+  "0 - 800": "#ff9999",
+  "801 - 1400": "#99ff99",
+  "1401 - 2000": "#9999ff"
+};
 // Gender color scheme
 const GENDER_COLORS = {
   1: "#3339ff",
@@ -76,23 +81,26 @@ function createTreemap(nodesData, view = "time_period", selectedPeriod = null) {
   }
 
   // Create treemap data structure
-  const plotlyData = [{
-    type: "treemap",
-    labels: [],
-    parents: [],
-    values: [],
-    textinfo: "label+value+percent parent",
-    hovertemplate: view === "time_period" 
-      ? "Time Period: %{label}<br>Count: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
-      : "Dynasty: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
-    marker: {
-      colors: [],
-      line: { width: 2 },
+  const plotlyData = [
+    {
+      type: "treemap",
+      labels: [],
+      parents: [],
+      values: [],
+      textinfo: "label+value+percent parent",
+      hovertemplate:
+        view === "time_period"
+          ? "Time Period: %{label}<br>Count: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
+          : "Dynasty: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
+      marker: {
+        colors: [],
+        line: { width: 2 },
+      },
+      tiling: {
+        packing: currentAlgorithm,
+      },
     },
-    tiling: {
-      packing: currentAlgorithm
-    }
-  }];
+  ];
 
   function processNode(node, parent = "") {
     const displayName = node.displayName || node.name;
@@ -111,18 +119,20 @@ function createTreemap(nodesData, view = "time_period", selectedPeriod = null) {
     const parent = plotlyData[0].parents[i];
     if (parent === "") return "#ffffff"; // root
     if (view === "nationality") {
-      const originalKey = Object.keys(DYNASTY_TRANSLATIONS).find(
-        (key) => DYNASTY_TRANSLATIONS[key] === label
-      ) || label;
+      const originalKey =
+        Object.keys(DYNASTY_TRANSLATIONS).find(
+          (key) => DYNASTY_TRANSLATIONS[key] === label
+        ) || label;
       return DYNASTY_COLORS[DYNASTY_TRANSLATIONS[originalKey]] || "#bdbdbd";
     }
     // Add different colors for time periods
-    return ["#ff9999", "#99ff99", "#9999ff"][parseInt(label.slice(-1)) - 1] || "#bdbdbd";
+    return (
+      periodColors[label] || "#bdbdbd"
+    );
   });
 
   return plotlyData;
 }
-
 
 const layout = {
   width: "70%",
@@ -199,13 +209,20 @@ function handleClick(eventData) {
 
   const point = eventData.points[0];
 
-  if (currentView === "time_period" && point.parent === "Chinese Buddhist Figures") {
+  if (
+    currentView === "time_period" &&
+    point.parent === "Chinese Buddhist Figures"
+  ) {
     selectedPeriod = point.label;
     currentView = "nationality";
 
     layout.title.text = `Dynasty Distribution in ${point.label}`;
 
-    const plotlyData = createTreemap(globalNodesData, "nationality", selectedPeriod);
+    const plotlyData = createTreemap(
+      globalNodesData,
+      "nationality",
+      selectedPeriod
+    );
     Plotly.react("treemap", plotlyData, layout);
 
     addBackButton();
@@ -249,7 +266,7 @@ function addBackButton() {
 // Add this function after your other functions
 function addAlgorithmSelector() {
   const container = document.getElementById("treemap").parentElement;
-  
+
   if (!document.getElementById("algoSelector")) {
     const selector = document.createElement("select");
     selector.id = "algoSelector";
@@ -264,10 +281,10 @@ function addAlgorithmSelector() {
     const algorithms = [
       { value: "squarify", text: "Squarify" },
       { value: "binary", text: "Binary" },
-      { value: "slice-dice", text: "Slice & Dice" }
+      { value: "slice-dice", text: "Slice & Dice" },
     ];
 
-    algorithms.forEach(algo => {
+    algorithms.forEach((algo) => {
       const option = document.createElement("option");
       option.value = algo.value;
       option.textContent = algo.text;
@@ -276,7 +293,11 @@ function addAlgorithmSelector() {
 
     selector.addEventListener("change", (e) => {
       currentAlgorithm = e.target.value;
-      const plotlyData = createTreemap(globalNodesData, currentView, selectedPeriod);
+      const plotlyData = createTreemap(
+        globalNodesData,
+        currentView,
+        selectedPeriod
+      );
       Plotly.react("treemap", plotlyData, layout);
     });
 
@@ -289,18 +310,18 @@ function initVisualization() {
   Promise.all([
     d3.csv("../../data/nodes1.csv"),
     d3.csv("../../data/nodes2.csv"),
-    d3.csv("../../data/nodes3.csv")
+    d3.csv("../../data/nodes3.csv"),
   ])
     .then(([nodes1, nodes2, nodes3]) => {
       // Combine all nodes and add time_period property
       globalNodesData = [
-        ...nodes1.map(n => ({...n, time_period: "Period 1"})),
-        ...nodes2.map(n => ({...n, time_period: "Period 2"})),
-        ...nodes3.map(n => ({...n, time_period: "Period 3"}))
+        ...nodes1.map((n) => ({ ...n, time_period: "0 - 800" })),
+        ...nodes2.map((n) => ({ ...n, time_period: "801 - 1400" })),
+        ...nodes3.map((n) => ({ ...n, time_period: "1401 - 2000" })),
       ];
-      
+
       const plotlyData = createTreemap(globalNodesData, "time_period");
-      
+
       layout.title.text = "Chinese Buddhist Figures by Time Period";
 
       Plotly.newPlot("treemap", plotlyData, layout).then((gd) => {
