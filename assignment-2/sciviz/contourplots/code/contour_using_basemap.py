@@ -6,6 +6,8 @@ import imageio
 import os
 import datetime
 
+#use basemap
+
 
 variable_names = ['precipitation_amount', 'relative_humidity', 'mean_vapor_pressure_deficit', 'surface_downwelling_shortwave_flux_in_air']
 file_names = ['pr', 'rmax', 'vpd', 'srad']
@@ -45,7 +47,7 @@ for file_name, variable_name, long_name in zip(file_names, variable_names, long_
     os.makedirs(f'../images/contour_frames_{file_name}', exist_ok=True)
 
     # Create contour plots for each day and save as images
-    step = num_days//10
+    step = num_days//11
     # print(f'step is {step}')
     for day_index in range(0, num_days, step):
         # if (day_index % 5) != 0:
@@ -70,8 +72,13 @@ for file_name, variable_name, long_name in zip(file_names, variable_names, long_
         x, y = m(lon_grid, lat_grid)
 
         # Define a colormap and contour levels for precipitation
-        cmap = plt.get_cmap('Blues') # blues is more intuitive
+        # cmap = plt.get_cmap('Blues') # blues is more intuitive
+
+        cmap = plt.get_cmap('jet_r')
         levels = np.linspace(np.min(req_slice), np.max(req_slice), 12)
+        if file_name == 'srad':
+            cmap = plt.get_cmap('jet')
+
 
         # Create filled contour map
         contourf = m.contourf(x, y, req_slice, levels=levels, cmap=cmap, extend='both') # do both contour and contour fill to get clear contours
