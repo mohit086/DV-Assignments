@@ -26,8 +26,8 @@ const dynasty_translations = {
 
 const DYNASTY_COLORS = {
     "Qing": "#FF0000",
-    "Tang": "#43FF00",
-    "Northern Song": "#0002B0",
+    "Tang": "#0002B0",
+    "Northern Song": "#43FF00", 
     "Ming": "#FFC90E",
     "Southern Song": "#650091",
     "Five Dynasties and Ten Kingdoms": "#72B300",
