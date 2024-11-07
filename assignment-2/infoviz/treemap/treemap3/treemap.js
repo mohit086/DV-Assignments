@@ -1,14 +1,14 @@
 const DYNASTY_TRANSLATIONS = {
   清: "Qing (清)",
   唐: "Tang (唐)",
-  北宋: "Northern Song (北宋)",
+  北宋: "Northern Song (北宋)", 
   明: "Ming (明)",
   南宋: "Southern Song (南宋)",
   五代十國: "Five Dynasties and Ten Kingdoms (五代十國)",
   "明 清": "Ming-Qing (明清)",
   元: "Yuan (元)",
   隋: "Sui (隋)",
-  劉宋: "Liu Song (劉宋)",
+  劉宋: "Liu Song (劉宋)", 
   南梁: "Southern Liang (南梁)",
   南齊: "Southern Qi (南齊)",
   東晉: "Eastern Jin (東晉)",
@@ -34,12 +34,12 @@ const DYNASTY_COLORS = {
   "Chen (陳)": "#FFFA88",
 };
 
-let currentView = "dynasty";
+let currentView = "interactions";
 let selectedDynasty = null;
 let globalEdgesData = null;
+let globalNodesData = null;
 let currentAlgorithm = "squarify";
 
-// Create the layout object for the Plotly chart
 const layout = {
   title: {
     text: "Chinese Buddhist Figures - Dynasty Interactions",
@@ -53,15 +53,15 @@ const layout = {
     l: 40,
     r: 40,
   },
-  height: 700,
-  width: "100%",
+  height: 600,
+  width: 1200,
   showlegend: false,
   hovermode: "closest",
 };
 
-function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
+function createTreemap(edgesData) {
   const interactionCounts = {};
-  
+
   edgesData.forEach((edge) => {
     const sourceNode = globalNodesData.find((node) => node.id === edge.source);
     const targetNode = globalNodesData.find((node) => node.id === edge.target);
@@ -69,45 +69,26 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
 
     const sourceDynasty = sourceNode.nationality;
     const targetDynasty = targetNode.nationality;
-    
+
     // Initialize if not already done
-    if (!interactionCounts[sourceDynasty]) interactionCounts[sourceDynasty] = {};
-    if (!interactionCounts[sourceDynasty][targetDynasty]) interactionCounts[sourceDynasty][targetDynasty] = 0;
+    if (!interactionCounts[sourceDynasty]) interactionCounts[sourceDynasty] = 0;
+    if (!interactionCounts[targetDynasty]) interactionCounts[targetDynasty] = 0;
 
     // Increment interaction count
-    interactionCounts[sourceDynasty][targetDynasty]++;
+    interactionCounts[sourceDynasty] += 1;
+    interactionCounts[targetDynasty] += 1;
   });
 
-  let hierarchyData;
-
-  if (view === "dynasty") {
-    hierarchyData = {
-      name: "Chinese Buddhist Figures",
-      children: Object.keys(interactionCounts).map((dynasty) => {
-        const totalInteractions = Object.values(interactionCounts[dynasty]).reduce((sum, count) => sum + count, 0);
-        return {
-          name: dynasty,
-          displayName: DYNASTY_TRANSLATIONS[dynasty] || dynasty,
-          value: totalInteractions,
-          children: Object.entries(interactionCounts[dynasty]).map(([targetDynasty, count]) => ({
-            name: targetDynasty,
-            displayName: DYNASTY_TRANSLATIONS[targetDynasty] || targetDynasty,
-            value: count,
-          })),
-        };
-      }),
-    };
-  } else if (view === "interactions" && selectedDynasty) {
-    const selectedInteractions = interactionCounts[selectedDynasty];
-    hierarchyData = {
-      name: DYNASTY_TRANSLATIONS[selectedDynasty] || selectedDynasty,
-      children: Object.entries(selectedInteractions).map(([targetDynasty, count]) => ({
-        name: targetDynasty,
-        displayName: DYNASTY_TRANSLATIONS[targetDynasty] || targetDynasty,
-        value: count,
-      })),
-    };
-  }
+  const hierarchyData = {
+    name: "Chinese Buddhist Figures",
+    value: 0,
+    children: Object.keys(interactionCounts).map((dynasty) => ({
+      name: dynasty,
+      displayName: DYNASTY_TRANSLATIONS[dynasty] || dynasty,
+      value: interactionCounts[dynasty],
+      color: DYNASTY_COLORS[DYNASTY_TRANSLATIONS[dynasty]]  // Fallback color
+    })),
+  };
 
   const plotlyData = [
     {
@@ -116,14 +97,10 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
       parents: [],
       values: [],
       textinfo: "label+value+percent parent",
-      hovertemplate: view === "dynasty"
-        ? "Dynasty: %{label}<br>Interactions: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
-        : "Interaction with: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
-      texttemplate: view === "dynasty"
-        ? "%{label}<br>%{value}<br>%{percentRoot:.1%}"
-        : "%{label}<br>%{value}<br>%{percentParent:.1%}",
+      hovertemplate: "Dynasty: %{label}<br>Interactions: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>",
+      texttemplate: "%{label}<br>%{value}<br>%{percentRoot:.1%}",
       marker: {
-        colors: [], // We'll populate this in the processNode function
+        colors: hierarchyData.children.map((node) => node.color),  // Map colors from hierarchyData
         line: { width: 2 },
       },
       tiling: {
@@ -134,39 +111,33 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
 
   function processNode(node, parent = "") {
     const displayName = node.displayName || node.name;
-    const uniqueLabel = `${displayName} (${node.value || 0})`;
+    const uniqueLabel = displayName
     console.log(`Adding node: label=${uniqueLabel}, parent=${parent}`);
     plotlyData[0].labels.push(uniqueLabel);
     plotlyData[0].parents.push(parent);
     plotlyData[0].values.push(node.value || 0);
 
     if (node.children) {
-        node.children.forEach((child) => processNode(child, uniqueLabel));
+      node.children.forEach((child) => processNode(child, uniqueLabel));
     }
-}
-
+  }
 
   processNode(hierarchyData);
 
   return plotlyData;
 }
 
+
 function handleClick(eventData) {
-  if (!eventData || !eventData.points || eventData.points.length === 0) return;
+  // This function is not needed since we're only showing the top-level dynasties
+}
 
-  const point = eventData.points[0];
-  if (currentView === "dynasty" && point.parent === "Chinese Buddhist Figures") {
-    selectedDynasty = Object.keys(DYNASTY_TRANSLATIONS).find(
-      (key) => DYNASTY_TRANSLATIONS[key] === point.label
-    ) || point.label;
+function addAlgorithmSelector() {
+  // This function is not needed since we're not allowing the user to change the algorithm
+}
 
-    currentView = "interactions";
-    layout.title.text = `Interactions of ${point.label} Dynasty`;
-
-    const plotlyData = createTreemap(globalEdgesData, "interactions", selectedDynasty);
-    Plotly.react("treemap", plotlyData, layout);
-    addBackButton();
-  }
+function addBackButton() {
+  // This function is not needed since we're only showing the top-level view
 }
 
 function initVisualization() {
@@ -174,12 +145,9 @@ function initVisualization() {
     .then(([nodesData, edgesData]) => {
       globalEdgesData = edgesData;
       globalNodesData = nodesData;
-      const plotlyData = createTreemap(edgesData, "dynasty");
+      const plotlyData = createTreemap(edgesData);
 
-      Plotly.newPlot("treemap", plotlyData, layout).then((gd) => {
-        gd.on("plotly_click", handleClick);
-        addAlgorithmSelector();
-      });
+      Plotly.newPlot("treemap", plotlyData, layout);
     })
     .catch((error) => console.error("Error loading data:", error));
 }
