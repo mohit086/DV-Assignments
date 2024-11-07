@@ -43,8 +43,15 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
   // Group data by dynasty
   const groupedByDynasty = new Map();
   edgesData.forEach((edge) => {
-    const sourceDynasty = edgesData.find((node) => node.id === edge.source).nationality;
-    const targetDynasty = edgesData.find((node) => node.id === edge.target).nationality;
+    let sourceDynasty, targetDynasty;
+    if (edgesData.length > 0) {
+      const sourceNode = globalNodesData.find((node) => node.id === edge.source);
+      const targetNode = globalNodesData.find((node) => node.id === edge.target);
+      if (sourceNode && targetNode) {
+        sourceDynasty = sourceNode.nationality;
+        targetDynasty = targetNode.nationality;
+      }
+    }
 
     if (!groupedByDynasty.has(sourceDynasty)) {
       groupedByDynasty.set(sourceDynasty, new Map());
@@ -52,7 +59,12 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
     if (!groupedByDynasty.get(sourceDynasty).has(targetDynasty)) {
       groupedByDynasty.get(sourceDynasty).set(targetDynasty, 0);
     }
-    groupedByDynasty.get(sourceDynasty).set(targetDynasty, groupedByDynasty.get(sourceDynasty).get(targetDynasty) + 1);
+    groupedByDynasty
+      .get(sourceDynasty)
+      .set(
+        targetDynasty,
+        groupedByDynasty.get(sourceDynasty).get(targetDynasty) + 1
+      );
   });
 
   // Create different hierarchy based on view
@@ -63,7 +75,10 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
       children: Array.from(groupedByDynasty, ([dynasty, interactions]) => ({
         name: dynasty,
         displayName: DYNASTY_TRANSLATIONS[dynasty] || dynasty,
-        value: Array.from(interactions.values()).reduce((sum, count) => sum + count, 0),
+        value: Array.from(interactions.values()).reduce(
+          (sum, count) => sum + count,
+          0
+        ),
         children: Array.from(interactions, ([targetDynasty, count]) => ({
           name: targetDynasty,
           displayName: DYNASTY_TRANSLATIONS[targetDynasty] || targetDynasty,
@@ -75,11 +90,14 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
     const selectedDynastyInteractions = groupedByDynasty.get(selectedDynasty);
     hierarchyData = {
       name: DYNASTY_TRANSLATIONS[selectedDynasty] || selectedDynasty,
-      children: Array.from(selectedDynastyInteractions, ([targetDynasty, count]) => ({
-        name: targetDynasty,
-        displayName: DYNASTY_TRANSLATIONS[targetDynasty] || targetDynasty,
-        value: count,
-      })),
+      children: Array.from(
+        selectedDynastyInteractions,
+        ([targetDynasty, count]) => ({
+          name: targetDynasty,
+          displayName: DYNASTY_TRANSLATIONS[targetDynasty] || targetDynasty,
+          value: count,
+        })
+      ),
     };
   }
 
@@ -154,15 +172,15 @@ const layout = {
   autosize: true,
 };
 
-function resizeVisualization() {
-  const container = document.getElementById("treemap").parentElement;
-  Plotly.relayout("treemap", {
-    width: container.offsetWidth,
-    height: container.offsetHeight,
-  });
-}
+// function resizeVisualization() {
+//   const container = document.getElementById("treemap").parentElement;
+//   Plotly.relayout("treemap", {
+//     width: container.offsetWidth,
+//     height: container.offsetHeight,
+//   });
+// }
 
-window.addEventListener("resize", resizeVisualization);
+// window.addEventListener("resize", resizeVisualization);
 
 function handleClick(eventData) {
   if (!eventData || !eventData.points || eventData.points.length === 0) return;
@@ -178,7 +196,11 @@ function handleClick(eventData) {
     currentView = "interactions";
     layout.title.text = `Interactions of ${point.label} Dynasty`;
 
-    const plotlyData = createTreemap(globalEdgesData, "interactions", dynastyKey);
+    const plotlyData = createTreemap(
+      globalEdgesData,
+      "interactions",
+      dynastyKey
+    );
     Plotly.react("treemap", plotlyData, layout);
     addBackButton();
   }
@@ -259,14 +281,17 @@ function addAlgorithmSelector() {
 }
 
 function initVisualization() {
-  Promise.all([d3.csv("nodes.csv"), d3.csv("edges.csv")])
+  Promise.all([d3.csv("../../data/nodes.csv"), d3.csv("../../data/edges.csv")])
     .then(([nodesData, edgesData]) => {
       globalEdgesData = edgesData;
+      globalNodesData = nodesData;
+      console.log("nodesData:", nodesData);
+      console.log("edgesData:", edgesData);
       const plotlyData = createTreemap(edgesData, "dynasty");
 
       Plotly.newPlot("treemap", plotlyData, layout).then((gd) => {
         gd.on("plotly_click", handleClick);
-        resizeVisualization();
+        // resizeVisualization();
         addAlgorithmSelector();
       });
     })
