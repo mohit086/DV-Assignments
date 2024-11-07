@@ -1,4 +1,3 @@
-// Dynasty translations mapping for display
 const DYNASTY_TRANSLATIONS = {
   清: "Qing (清)",
   唐: "Tang (唐)",
@@ -35,51 +34,55 @@ const DYNASTY_COLORS = {
   "Chen (陳)": "#FFFA88",
 };
 
-const GENDER_MAPPING = {
-  1: "Male",
-  2: "Female",
-};
-// Gender color scheme
-const GENDER_COLORS = {
-  Male: "#3339ff",
-  Female: "#ff77fb",
-};
-
-let currentView = "nationality"; // Track current view state
-let selectedNationality = null; // Track selected nationality
-let globalNodesData = null; // Store nodes data globally
+let currentView = "dynasty";
+let selectedDynasty = null;
+let globalEdgesData = null;
 let currentAlgorithm = "squarify";
 
-// Create the visualization
-function createTreemap(nodesData, view = "nationality", selectedNat = null) {
-  // Group data by nationality
-  const groupedByNationality = d3.group(nodesData, (d) => d.nationality);
+function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
+  // Group data by dynasty
+  const groupedByDynasty = new Map();
+  edgesData.forEach((edge) => {
+    const sourceDynasty = edgesData.find((node) => node.id === edge.source).nationality;
+    const targetDynasty = edgesData.find((node) => node.id === edge.target).nationality;
+
+    if (!groupedByDynasty.has(sourceDynasty)) {
+      groupedByDynasty.set(sourceDynasty, new Map());
+    }
+    if (!groupedByDynasty.get(sourceDynasty).has(targetDynasty)) {
+      groupedByDynasty.get(sourceDynasty).set(targetDynasty, 0);
+    }
+    groupedByDynasty.get(sourceDynasty).set(targetDynasty, groupedByDynasty.get(sourceDynasty).get(targetDynasty) + 1);
+  });
 
   // Create different hierarchy based on view
   let hierarchyData;
-  if (view === "nationality") {
+  if (view === "dynasty") {
     hierarchyData = {
       name: "Chinese Buddhist Figures",
-      children: Array.from(groupedByNationality, ([nationality, nodes]) => ({
-        name: nationality,
-        displayName: DYNASTY_TRANSLATIONS[nationality] || nationality,
-        value: nodes.length,
+      children: Array.from(groupedByDynasty, ([dynasty, interactions]) => ({
+        name: dynasty,
+        displayName: DYNASTY_TRANSLATIONS[dynasty] || dynasty,
+        value: Array.from(interactions.values()).reduce((sum, count) => sum + count, 0),
+        children: Array.from(interactions, ([targetDynasty, count]) => ({
+          name: targetDynasty,
+          displayName: DYNASTY_TRANSLATIONS[targetDynasty] || targetDynasty,
+          value: count,
+        })),
       })),
     };
-  } else if (view === "gender" && selectedNat) {
-    const nationalityData = groupedByNationality.get(selectedNat);
-    const genderGroups = d3.group(nationalityData, (d) => d.gender);
-
+  } else if (view === "interactions" && selectedDynasty) {
+    const selectedDynastyInteractions = groupedByDynasty.get(selectedDynasty);
     hierarchyData = {
-      name: DYNASTY_TRANSLATIONS[selectedNat] || selectedNat,
-      children: Array.from(genderGroups, ([gender, nodes]) => ({
-        name: GENDER_MAPPING[gender] || gender,
-        value: nodes.length,
+      name: DYNASTY_TRANSLATIONS[selectedDynasty] || selectedDynasty,
+      children: Array.from(selectedDynastyInteractions, ([targetDynasty, count]) => ({
+        name: targetDynasty,
+        displayName: DYNASTY_TRANSLATIONS[targetDynasty] || targetDynasty,
+        value: count,
       })),
     };
   }
 
-  // Create treemap data structure
   const plotlyData = [
     {
       type: "treemap",
@@ -88,11 +91,11 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
       values: [],
       textinfo: "label+value+percent parent",
       hovertemplate:
-        view === "nationality"
-          ? "Dynasty: %{label}<br>Count: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
-          : "Gender: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
+        view === "dynasty"
+          ? "Dynasty: %{label}<br>Interactions: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
+          : "Interaction with: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
       texttemplate:
-        view === "nationality"
+        view === "dynasty"
           ? "%{label}<br>%{value}<br>%{percentRoot:.1%}"
           : "%{label}<br>%{value}<br>%{percentParent:.1%}",
       marker: {
@@ -105,7 +108,6 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
     },
   ];
 
-  // Process hierarchy for Plotly
   function processNode(node, parent = "") {
     const displayName = node.displayName || node.name;
     plotlyData[0].labels.push(displayName);
@@ -119,21 +121,19 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
 
   processNode(hierarchyData);
 
-  // Create color scheme
-  // Apply colors
   plotlyData[0].marker.colors = plotlyData[0].labels.map((label, i) => {
     const parent = plotlyData[0].parents[i];
-    if (parent === "") return "#ffffff"; // root
-    if (view === "nationality") {
-      // Find original key from translation
+    if (parent === "") return "#ffffff";
+    if (view === "dynasty") {
       const originalKey =
         Object.keys(DYNASTY_TRANSLATIONS).find(
           (key) => DYNASTY_TRANSLATIONS[key] === label
         ) || label;
       return DYNASTY_COLORS[DYNASTY_TRANSLATIONS[originalKey]] || "#bdbdbd";
     }
-    return GENDER_COLORS[label] || "#bdbdbd"; // gender level
+    return DYNASTY_COLORS[DYNASTY_TRANSLATIONS[label]] || "#bdbdbd";
   });
+
   return plotlyData;
 }
 
@@ -164,81 +164,26 @@ function resizeVisualization() {
 
 window.addEventListener("resize", resizeVisualization);
 
-// Create legend
-// function createLegend(nodesData) {
-//   const legendDiv = document.getElementById("nationalityLegend");
-//   legendDiv.innerHTML = ""; // Clear existing legend
-
-//   if (currentView === "nationality") {
-//     [...new Set(nodesData.map((d) => d.nationality))].forEach((nationality) => {
-//       const legendItem = document.createElement("div");
-//       legendItem.className = "legend-item";
-
-//       const colorBox = document.createElement("div");
-//       colorBox.className = "legend-color";
-//       colorBox.style.backgroundColor =
-//         DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
-
-//       const label = document.createElement("span");
-//       label.textContent = DYNASTY_TRANSLATIONS[nationality] || nationality;
-
-//       legendItem.appendChild(colorBox);
-//       legendItem.appendChild(label);
-//       legendDiv.appendChild(legendItem);
-//     });
-//   } else {
-//     // Gender legend
-//     Object.entries(GENDER_COLORS).forEach(([gender, color]) => {
-//       const legendItem = document.createElement("div");
-//       legendItem.className = "legend-item";
-
-//       const colorBox = document.createElement("div");
-//       colorBox.className = "legend-color";
-//       colorBox.style.backgroundColor = color;
-
-//       const label = document.createElement("span");
-//       label.textContent = gender === "1" ? "Male" : "Female";
-
-//       legendItem.appendChild(colorBox);
-//       legendItem.appendChild(label);
-//       legendDiv.appendChild(legendItem);
-//     });
-//   }
-// }
-
-// Handle click events
 function handleClick(eventData) {
   if (!eventData || !eventData.points || eventData.points.length === 0) return;
 
   const point = eventData.points[0];
 
   if (
-    currentView === "nationality" &&
+    currentView === "dynasty" &&
     point.parent === "Chinese Buddhist Figures"
   ) {
-    // Find the original nationality key
-    const nationalityKey =
-      Object.keys(DYNASTY_TRANSLATIONS).find(
-        (key) => DYNASTY_TRANSLATIONS[key] === point.label
-      ) || point.label;
+    const dynastyKey = point.label;
+    selectedDynasty = dynastyKey;
+    currentView = "interactions";
+    layout.title.text = `Interactions of ${point.label} Dynasty`;
 
-    selectedNationality = nationalityKey;
-    currentView = "gender";
-
-    // Update title
-    layout.title.text = `Gender Distribution in ${point.label} Dynasty`;
-
-    // Update visualization
-    const plotlyData = createTreemap(globalNodesData, "gender", nationalityKey);
+    const plotlyData = createTreemap(globalEdgesData, "interactions", dynastyKey);
     Plotly.react("treemap", plotlyData, layout);
-    // createLegend(globalNodesData);
-
-    // Add back button
     addBackButton();
   }
 }
 
-// Add back button
 function addBackButton() {
   const container = document.getElementById("treemap").parentElement;
 
@@ -258,14 +203,12 @@ function addBackButton() {
     `;
 
     backButton.addEventListener("click", () => {
-      currentView = "nationality";
-      selectedNationality = null;
+      currentView = "dynasty";
+      selectedDynasty = null;
       layout.title.text = "Chinese Buddhist Figures by Dynasty";
 
-      const plotlyData = createTreemap(globalNodesData, "nationality");
+      const plotlyData = createTreemap(globalEdgesData, "dynasty");
       Plotly.react("treemap", plotlyData, layout);
-      // createLegend(globalNodesData);
-
       backButton.remove();
     });
 
@@ -273,7 +216,6 @@ function addBackButton() {
   }
 }
 
-// Add this function after your other functions
 function addAlgorithmSelector() {
   const container = document.getElementById("treemap").parentElement;
 
@@ -305,9 +247,9 @@ function addAlgorithmSelector() {
     selector.addEventListener("change", (e) => {
       currentAlgorithm = e.target.value;
       const plotlyData = createTreemap(
-        globalNodesData,
+        globalEdgesData,
         currentView,
-        selectedNationality
+        selectedDynasty
       );
       Plotly.react("treemap", plotlyData, layout);
     });
@@ -316,46 +258,31 @@ function addAlgorithmSelector() {
   }
 }
 
-// Main initialization function
 function initVisualization() {
-  Promise.all([d3.csv("../../data/nodes.csv"), d3.csv("../../data/edges.csv")])
+  Promise.all([d3.csv("nodes.csv"), d3.csv("edges.csv")])
     .then(([nodesData, edgesData]) => {
-      globalNodesData = nodesData;
-      const plotlyData = createTreemap(nodesData, "nationality");
-      // createLegend(nodesData);
+      globalEdgesData = edgesData;
+      const plotlyData = createTreemap(edgesData, "dynasty");
 
-      // Create treemap with click handler
       Plotly.newPlot("treemap", plotlyData, layout).then((gd) => {
         gd.on("plotly_click", handleClick);
-        resizeVisualization(); // Initial resize
+        resizeVisualization();
         addAlgorithmSelector();
       });
     })
     .catch((error) => console.error("Error loading data:", error));
 }
 
-// Add necessary CSS
 const style = document.createElement("style");
 style.textContent = `
-  #nationalityLegend {
+  #algoSelector {
     position: absolute;
-    top: 50px;
+    top: 10px;
     right: 10px;
-    padding: 10px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    margin: 5px;
-  }
-  .legend-color {
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-    border: 1px solid #ddd;
+    padding: 4px 8px;
+    border-radius: 4px;
   }
 `;
 document.head.appendChild(style);
 
-// Initialize visualization when DOM is ready
 document.addEventListener("DOMContentLoaded", initVisualization);
