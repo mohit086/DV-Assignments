@@ -132,8 +132,8 @@ Promise.all([
        type: 'parcoords',
        line: {
         //    color: nodesData.map(node => node.nationality),
-        color: nodesData.map(node => DYNASTY_COLORS[dynasty_translations[node.nationality]]),
-        //    colorscale: generate_color_scale(all_colors, nationalityMap.size),
+        // color: nodesData.map(node => DYNASTY_COLORS[dynasty_translations[node.nationality]]),
+           colorscale: generate_color_scale(all_colors, nationalityMap.size),
             // colorscale: ['red', 'green', 'blue', 'orange', 'pink', 'cyan', 'violet', 'yellow', 'olive',  'brown', 'black', 'magenta'],
        },
        dimensions: [
@@ -145,6 +145,8 @@ Promise.all([
            { label: 'Interactions', values: nodesData.map(node => node.interactions) },
        ],
    };
+
+   console.log(trace.line.color)
    
 
    const data1 = [trace];
