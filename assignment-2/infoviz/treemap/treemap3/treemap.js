@@ -1,57 +1,4 @@
-// const DYNASTY_TRANSLATIONS = {
-//   清: "Qing (清)",
-//   唐: "Tang (唐)",
-//   北宋: "Northern Song (北宋)",
-//   明: "Ming (明)",
-//   南宋: "Southern Song (南宋)",
-//   五代十國: "Five Dynasties and Ten Kingdoms (五代十國)",
-//   "明 清": "Ming-Qing (明清)",
-//   元: "Yuan (元)",
-//   隋: "Sui (隋)",
-//   劉宋: "Liu Song (劉宋)",
-//   南梁: "Southern Liang (南梁)",
-//   南齊: "Southern Qi (南齊)",
-//   東晉: "Eastern Jin (東晉)",
-//   宋: "Song (宋)",
-//   陳: "Chen (陳)",
-// };
-
-// const DYNASTY_COLORS = {
-//   "Qing (清)": "#FF0000",
-//   "Tang (唐)": "#0002B0",
-//   "Northern Song (北宋)": "#43FF00",
-//   "Ming (明)": "#FFC90E",
-//   "Southern Song (南宋)": "#650091",
-//   "Five Dynasties and Ten Kingdoms (五代十國)": "#72B300",
-//   "Ming-Qing (明清)": "#5E3500",
-//   "Yuan (元)": "#FFB077",
-//   "Sui (隋)": "#007061",
-//   "Liu Song (劉宋)": "#F354FF",
-//   "Southern Liang (南梁)": "#97FFDB",
-//   "Southern Qi (南齊)": "#46611B",
-//   "Eastern Jin (東晉)": "#5C79FF",
-//   "Song (宋)": "#AD1F78",
-//   "Chen (陳)": "#FFFA88",
-// };
-
 const DYNASTY_TRANSLATIONS = {
-<<<<<<< HEAD
-  '清': 'Qing',
-  '明': 'Ming',
-  '唐': 'Tang',
-  '南宋': 'Southern Song',
-  '明 清': 'Ming-Qing',
-  '元': 'Yuan',
-  '北宋': 'Northern Song',
-  '宋': 'Song',
-  '五代十國': 'Five Dynasties and Ten Kingdoms',
-  '隋': 'Sui',
-  '陳': 'Chen',
-  '東晉': 'Eastern Jin',
-  '南梁': 'Southern Liang',
-  '劉宋': 'Liu Song',
-  '南齊': 'Southern Qi'
-=======
   清: "Qing (清)",
   唐: "Tang (唐)",
   北宋: "Northern Song (北宋)",
@@ -67,33 +14,31 @@ const DYNASTY_TRANSLATIONS = {
   東晉: "Eastern Jin (東晉)",
   宋: "Song (宋)",
   陳: "Chen (陳)",
->>>>>>> 2262e9c91277a3e9d7cedc1bed917dab12f79ff4
 };
 
-
 const DYNASTY_COLORS = {
-  "Qing": "#FF0000",
-  "Tang": "#0002B0",
-  "Northern Song": "#43FF00", 
-  "Ming": "#FFC90E",
-  "Southern Song": "#650091",
-  "Five Dynasties and Ten Kingdoms": "#72B300",
-  "Ming-Qing": "#5E3500",
-  "Yuan": "#FFB077",
-  "Sui": "#007061",
-  "Liu Song": "#F354FF",
-  "Southern Liang": "#97FFDB",
-  "Southern Qi": "#46611B",
-  "Eastern Jin": "#5C79FF",
-  "Song": "#AD1F78",
-  "Chen": "#FFFA88",
+  "Qing (清)": "#FF0000",
+  "Tang (唐)": "#0002B0",
+  "Northern Song (北宋)": "#43FF00",
+  "Ming (明)": "#FFC90E",
+  "Southern Song (南宋)": "#650091",
+  "Five Dynasties and Ten Kingdoms (五代十國)": "#72B300",
+  "Ming-Qing (明清)": "#5E3500",
+  "Yuan (元)": "#FFB077",
+  "Sui (隋)": "#007061",
+  "Liu Song (劉宋)": "#F354FF",
+  "Southern Liang (南梁)": "#97FFDB",
+  "Southern Qi (南齊)": "#46611B",
+  "Eastern Jin (東晉)": "#5C79FF",
+  "Song (宋)": "#AD1F78",
+  "Chen (陳)": "#FFFA88",
 };
 
 let currentView = "dynasty";
 let selectedDynasty = null;
 let globalEdgesData = null;
 let globalNodesData = null;
-let currentAlgorithm = "squarify";
+let currentAlgorithm = "dice";
 
 const layout = {
   title: {
@@ -108,7 +53,7 @@ const layout = {
     l: 40,
     r: 40,
   },
-  height: 700,
+  height: 600,
   width: 1500,
   showlegend: false,
   hovermode: "closest",
@@ -116,7 +61,7 @@ const layout = {
 
 function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
   const interactionCounts = {};
-  
+
   // Count both source and target interactions
   edgesData.forEach((edge) => {
     const sourceNode = globalNodesData.find((node) => node.id === edge.source);
@@ -125,43 +70,49 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
 
     const sourceDynasty = sourceNode.nationality;
     const targetDynasty = targetNode.nationality;
-    
-    if (!interactionCounts[sourceDynasty]) interactionCounts[sourceDynasty] = {};
-    if (!interactionCounts[targetDynasty]) interactionCounts[targetDynasty] = {};
-    
+
+    if (!interactionCounts[sourceDynasty])
+      interactionCounts[sourceDynasty] = {};
+    if (!interactionCounts[targetDynasty])
+      interactionCounts[targetDynasty] = {};
+
     if (!interactionCounts[sourceDynasty][targetDynasty]) {
       interactionCounts[sourceDynasty][targetDynasty] = 0;
     }
     if (!interactionCounts[targetDynasty][sourceDynasty]) {
       interactionCounts[targetDynasty][sourceDynasty] = 0;
     }
-    
+
     interactionCounts[sourceDynasty][targetDynasty]++;
     if (sourceDynasty !== targetDynasty) {
       interactionCounts[targetDynasty][sourceDynasty]++;
     }
   });
 
-  const plotlyData = [{
-    type: "treemap",
-    labels: [],
-    parents: [],
-    values: [],
-    textinfo: "label+value+percent parent",
-    hovertemplate: view === "dynasty"
-      ? "Dynasty: %{label}<br>Interactions: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
-      : "Interaction with: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
-    texttemplate: view === "dynasty"
-      ? "%{label}<br>%{value}<br>%{percentRoot:.1%}"
-      : "%{label}<br>%{value}<br>%{percentParent:.1%}",
-    marker: {
-      colors: [],
-      line: { width: 2 },
+  const plotlyData = [
+    {
+      type: "treemap",
+      labels: [],
+      parents: [],
+      values: [],
+      textinfo: "label+value+percent parent",
+      hovertemplate:
+        view === "dynasty"
+          ? "Dynasty: %{label}<br>Interactions: %{value}<br>Percentage: %{percentRoot:.1%}<extra></extra>"
+          : "Interaction with: %{label}<br>Count: %{value}<br>Percentage: %{percentParent:.1%}<extra></extra>",
+      texttemplate:
+        view === "dynasty"
+          ? "%{label}<br>%{value}<br>%{percentRoot:.1%}"
+          : "%{label}<br>%{value}<br>%{percentParent:.1%}",
+      marker: {
+        colors: [],
+        line: { width: 2 },
+      },
+      tiling: {
+        packing: currentAlgorithm,
+      },
     },
-    tiling: {
-      packing: currentAlgorithm,
-    },
-  }];
+  ];
 
   if (view === "dynasty") {
     // Add root without value display
@@ -172,29 +123,37 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
 
     // Add dynasty-level data
     Object.keys(interactionCounts).forEach((dynasty) => {
-      const totalInteractions = Object.values(interactionCounts[dynasty])
-        .reduce((sum, count) => sum + count, 0);
+      const totalInteractions = Object.values(
+        interactionCounts[dynasty]
+      ).reduce((sum, count) => sum + count, 0);
       const displayName = DYNASTY_TRANSLATIONS[dynasty] || dynasty;
-      
+
       plotlyData[0].labels.push(displayName);
       plotlyData[0].parents.push("Chinese Buddhist Figures");
       plotlyData[0].values.push(totalInteractions);
-      plotlyData[0].marker.colors.push(DYNASTY_COLORS[displayName] || '#808080');
+      plotlyData[0].marker.colors.push(
+        DYNASTY_COLORS[displayName] || "#808080"
+      );
     });
   } else if (view === "interactions" && selectedDynasty) {
     const selectedDisplayName = selectedDynasty;
-    
+
     // Collect all interactions where the selected dynasty is either source or target
     const allInteractions = {};
-    Object.keys(interactionCounts).forEach(dynasty => {
+    Object.keys(interactionCounts).forEach((dynasty) => {
       if (dynasty === selectedDynasty) {
         // Add interactions where selected dynasty is the source
-        Object.entries(interactionCounts[dynasty]).forEach(([targetDynasty, count]) => {
-          allInteractions[targetDynasty] = (allInteractions[targetDynasty] || 0) + count;
-        });
+        Object.entries(interactionCounts[dynasty]).forEach(
+          ([targetDynasty, count]) => {
+            allInteractions[targetDynasty] =
+              (allInteractions[targetDynasty] || 0) + count;
+          }
+        );
       } else if (interactionCounts[dynasty][selectedDynasty]) {
         // Add interactions where selected dynasty is the target
-        allInteractions[dynasty] = (allInteractions[dynasty] || 0) + interactionCounts[dynasty][selectedDynasty];
+        allInteractions[dynasty] =
+          (allInteractions[dynasty] || 0) +
+          interactionCounts[dynasty][selectedDynasty];
       }
     });
 
@@ -202,16 +161,20 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
     plotlyData[0].labels.push(selectedDisplayName);
     plotlyData[0].parents.push("");
     plotlyData[0].values.push(0);
-    plotlyData[0].marker.colors.push(DYNASTY_COLORS[selectedDisplayName] || '#808080');
+    plotlyData[0].marker.colors.push(
+      DYNASTY_COLORS[selectedDisplayName] || "#808080"
+    );
 
     // Add interaction data
     Object.entries(allInteractions).forEach(([dynasty, count]) => {
       const displayName = DYNASTY_TRANSLATIONS[dynasty] || dynasty;
-      
+
       plotlyData[0].labels.push(displayName);
       plotlyData[0].parents.push(selectedDisplayName);
       plotlyData[0].values.push(count);
-      plotlyData[0].marker.colors.push(DYNASTY_COLORS[displayName] || '#808080');
+      plotlyData[0].marker.colors.push(
+        DYNASTY_COLORS[displayName] || "#808080"
+      );
     });
   }
 
@@ -219,31 +182,47 @@ function createTreemap(edgesData, view = "dynasty", selectedDynasty = null) {
 }
 
 function addAlgorithmSelector() {
+  // Create a container for the dropdown
   const container = document.createElement("div");
   container.style.marginBottom = "10px";
-  
-  
+
+  // Create a label for the dropdown
+  const label = document.createElement("label");
+  label.textContent = "";
+  label.style.marginRight = "10px";
+
+  // Create the dropdown select element
   const select = document.createElement("select");
   select.id = "algorithm-selector";
-  
+
+  // Define the list of algorithms
   const algorithms = ["squarify", "binary", "slice", "dice"];
-  
-  algorithms.forEach(algo => {
+
+  // Populate the dropdown with options
+  algorithms.forEach((algo) => {
     const option = document.createElement("option");
     option.value = algo;
     option.textContent = algo.charAt(0).toUpperCase() + algo.slice(1);
     if (algo === currentAlgorithm) option.selected = true;
     select.appendChild(option);
   });
-  
+
+  // Handle changes to the selected algorithm
   select.onchange = (e) => {
     currentAlgorithm = e.target.value;
-    const plotlyData = createTreemap(globalEdgesData, currentView, selectedDynasty);
+    const plotlyData = createTreemap(
+      globalEdgesData,
+      currentView,
+      selectedDynasty
+    );
     Plotly.react("treemap", plotlyData, layout);
   };
-  
+
+  // Add label and select dropdown to the container
   container.appendChild(label);
   container.appendChild(select);
+
+  // Insert the container before the treemap element
   document.body.insertBefore(container, document.getElementById("treemap"));
 }
 
@@ -282,7 +261,11 @@ function handleClick(eventData) {
     if (selectedDynasty) {
       currentView = "interactions";
       layout.title.text = `Interactions of ${dynastyName}`;
-      const plotlyData = createTreemap(globalEdgesData, "interactions", selectedDynasty);
+      const plotlyData = createTreemap(
+        globalEdgesData,
+        "interactions",
+        selectedDynasty
+      );
       Plotly.react("treemap", plotlyData, layout);
       addBackButton();
     }
@@ -298,36 +281,11 @@ function initVisualization() {
 
       Plotly.newPlot("treemap", plotlyData, layout).then((gd) => {
         gd.on("plotly_click", handleClick);
+
         addAlgorithmSelector();
       });
     })
     .catch((error) => console.error("Error loading data:", error));
 }
 
-<<<<<<< HEAD
-const style = document.createElement("style");
-style.textContent = `
-  #algoSelector {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
-`;
-document.head.appendChild(style);
-
-document.addEventListener("DOMContentLoaded", initVisualization);
-
-function resizeVisualization() {
-  const container = document.getElementById("treemap").parentElement;
-  Plotly.relayout("treemap", {
-    width: container.offsetWidth,
-    height: container.offsetHeight,
-  });
-}
-
-window.addEventListener("resize", resizeVisualization);
-=======
 initVisualization();
->>>>>>> 2262e9c91277a3e9d7cedc1bed917dab12f79ff4
