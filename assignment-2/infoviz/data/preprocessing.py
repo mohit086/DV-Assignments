@@ -3,7 +3,7 @@ import pandas as pd
 import networkx as nx
 import xml.etree.ElementTree as ET
 
-input_file = 'data/chinese_buddhism.gexf'
+input_file = 'chinese_buddhism.gexf'
 # Note - Added a line <attribute id="n@nationality" title="nationality" type="string"/> to the node attributes of the .gexf file.
 # Added it below this line - <attribute id="n@gender" title="gender" type="integer"/> (Line 11)
 
@@ -104,8 +104,8 @@ edges_df.columns = ['source', 'target', 'attributes']  # Rename columns for clar
 edges_df = pd.concat([edges_df.drop('attributes', axis=1), edges_df['attributes'].apply(pd.Series)], axis=1)
 
 # Save the final graph to CSV
-nodes_df.to_csv("data/nodes.csv", index=False)
-edges_df.to_csv("data/edges.csv", index=False)
+nodes_df.to_csv("nodes.csv", index=False)
+edges_df.to_csv("edges.csv", index=False)
 
 # Print statistics
 print(f"After preprocessing, {len(nodes_df)} nodes, {len(edges_df)} edges")
@@ -137,7 +137,7 @@ for i, (start_year, end_year) in enumerate(ranges, start=1):
     edges_df = pd.concat([edges_df.drop('attributes', axis=1),
                           edges_df['attributes'].apply(pd.Series)], axis=1)
     
-    nodes_df.to_csv(f"data/nodes{i}.csv", index=False)
-    edges_df.to_csv(f"data/edges{i}.csv", index=False)
+    nodes_df.to_csv(f"nodes{i}.csv", index=False)
+    edges_df.to_csv(f"edges{i}.csv", index=False)
     
     print(f"Subgraph {i}: {len(nodes_df)} nodes, {len(edges_df)} edges")
