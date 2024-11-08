@@ -64,7 +64,7 @@ Promise.all([
 
    //encode nationalities
    let nationalities= [...new Set(nodesData.map(node => node.nationality))];
-   let nationalities_arr = nationalities
+   let nationalities_arr = nationalities // this is an array of chinese words
    const nationality_BirthYearMap = new Map();
    let count = 0;
    nodesData.forEach(node => {
@@ -87,54 +87,76 @@ Promise.all([
        // if(retval < 0) console.log('here')
        // else console.log('there')
        return (nationality_BirthYearMap[a] - nationality_BirthYearMap[b]) 
-   })
+   })//sort chinese nationality names by birth year
 
-//  nationalities_arr contains the sorted nationalities   
+//  nationalities_arr contains the sorted nationalities(in chinese)   
 
    
    const nationalityMap = new Map(nationalities_arr.map((el, idx) => [el, idx])); 
-   console.log(nationalityMap) //Maps a nationality to a number
+//    console.log(nationalityMap) //Maps a nationality to a number
    
    nodesData.forEach(node => {
-       node.nationality = nationalityMap.get(node.nationality);
+    node.chinese_word = node.nationality;
+    node.nationality = nationalityMap.get(node.nationality);
+       
    });
 
    
    
    all_colors = ['red', 'green', 'blue', 'orange', 'pink', 'cyan', 'violet', 'yellow', 'olive',  'brown', 'black', 'magenta']
 
-   function generate_color_scale(all_colors, len1) {
-       len1-=1
-       const ans = [];
-       const step = 1 / len1;
-       let j = 0
-    //    for(let i=0; i < nationalityMap.size; i++){
-    //        let arr = []
-    //        arr = [j.toFixed(2), all_colors[i]]
-    //        j += step
-    //        ans.push(arr)
-    //    }
-        let i=0
-          for(let [key, value] of nationalityMap){
-            let arr = []
-           arr = [j.toFixed(2), DYNASTY_COLORS[dynasty_translations[key]]]
-           j += step
-           ans.push(arr)
-            i+=1;
-          }
-       return ans;
-   }
 
+function generate_color_scale1(){
+    let ans = []
+    let len1 = nationalities_arr.length
+    console.log('ensure', nationalities_arr.map(nat => dynasty_translations[nat]));
+    len1-=1
+    step = 1/len1;
+    let j =0;
+    let i=0;
+    let end = 0
+    ITER = 20
+    while((end < 1.1) && ITER){
+        let arr = []
+        arr = [j.toFixed(2), DYNASTY_COLORS[dynasty_translations[nationalities_arr[i]]]]
+        ans.push(arr)
+        j+=step
+        i+=1
+        end = j;
+        ITER-=1;
+    }
+    console.log(ans);
+    return ans;
+
+}
 
 
    // Create the parallel coordinates plot
    const trace = {
        type: 'parcoords',
        line: {
-        //    color: nodesData.map(node => node.nationality),
-        // color: nodesData.map(node => DYNASTY_COLORS[dynasty_translations[node.nationality]]),
-           colorscale: generate_color_scale(all_colors, nationalityMap.size),
-            // colorscale: ['red', 'green', 'blue', 'orange', 'pink', 'cyan', 'violet', 'yellow', 'olive',  'brown', 'black', 'magenta'],
+        //    color: nodesData.map(node => node.nationality),//here node.nationality is a number,
+        color: nodesData.map(node => {
+            let ans = 'None'
+            let i=0
+            nationalities_arr.forEach((val) => {
+                if (val == node.chinese_word){
+                    ans = i;
+                }
+                i += 1;
+            })
+            if (ans == 'None'){
+                console.log('sugar')
+            }
+            else{
+                return ans;
+            }
+        }),
+           color2: nodesData.map(node => dynasty_translations[node.chinese_word]),
+
+        // color: nodesData.map((node) => {
+        // }),
+           colorscale: generate_color_scale1(),
        },
        dimensions: [
            { label: 'Nationality', values: nodesData.map(node => node.nationality),
@@ -146,10 +168,15 @@ Promise.all([
        ],
    };
 
-   console.log(trace.line.color)
+//    console.log(`${trace.line.color.length}, ${nodesData.length}`)
+
    
 
    const data1 = [trace];
+
+   console.log(trace.line.color)
+   console.log(trace.line.color2)
+
 
    const layout1 = {
        title: 'Parallel Coordinates Plot',
@@ -163,9 +190,6 @@ Promise.all([
     },
    };
 
-   // console.log(`lies all that here ${data1[0].line.colorscale}`)
-   // console.log(nodesData.map(node => node.nationality))
-   // console.log(generate_color_scale(all_colors, 13))
 
    Plotly.newPlot(`plot${j}`, data1, layout1);
    j+=1;
@@ -189,3 +213,4 @@ Promise.all([
        //     ['0.888888888889', 'rgb(69,117,180)'],
        //     ['1.0', 'rgb(49,54,149)']
        // ]
+
