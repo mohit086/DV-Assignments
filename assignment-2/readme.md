@@ -6,6 +6,10 @@ Ensure you have the required libraries -
 
 ```pip install numpy pandas matplotlib basemap imageio xarray scipy```
 
+or 
+
+```conda install numpy pandas matplotlib basemap imageio xarray scipy```
+
 ## Scientific Visualizations
 
 #### Data Handling
@@ -20,6 +24,12 @@ This will download the datasets and clip them from June 1 to August 31.
 #### Quiver Plots
 
 Go to _sciviz/quiverplots/code_ and run the python files present there. The gifs will be stored in _sciviz/quiverplots/gifs_, and the images in _sciviz/quiverplots/images_. The code is appropriately commented and can be tweaked to change the visualizations.
+
+If you get the error
+
+```qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem. Available platform plugins are: eglfs, minimal, minimalegl, offscreen, vnc, webgl, xcb.```
+
+please write ```export QT_QPA_PLATFORM=offscreen``` in the console before running, it should work. This error doesn't come up in jupyter notebooks, so we have kept the .ipynb files as well.
 
 #### Color Maps
 
