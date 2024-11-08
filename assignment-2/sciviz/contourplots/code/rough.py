@@ -5,10 +5,12 @@ import os
 import datetime
 
 
-file_name = 'srad'
+file_name = 'pet'
+
 file_path = f'../../data/{file_name}.nc'  # Update with your NetCDF file path
 dataset = nc.Dataset(file_path)
-print(dataset.variables['surface_downwelling_shortwave_flux_in_air'].units)
+print(dataset.variables)
+
 
 
 
