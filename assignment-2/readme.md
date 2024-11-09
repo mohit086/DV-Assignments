@@ -34,6 +34,23 @@ please write ```export QT_QPA_PLATFORM=offscreen``` in the console before runnin
 
 #### Color Maps
 
+Go to _sciviz/colormaps/code_ . 
+
+For viewing different experiments on the maximum temperature colormap, run different_approaches.py 
+The images will be stored in _sciviz/colormaps/images_ in the different_approaches folder.
+The 'days' list in different_approaches.py takes the index of days for which the colormaps have to be made. I have used days=[27] for color palette and discretization experiments and days=[1,45,91] for scaling approaches in the report but you can tweak the days list to modify the days on which the visualizations are generated.
+Index 0 corresponds to June 1 and so on until index 91 which corresponds to August 31. 
+
+For viewing the plots of significant weather events during this period run inferences.py
+The images will be stored in _sciviz/colormaps/images_ in the inferences folder
+
+For viewing the GIF of maximum temperature run gif_maker.py
+The GIF will be stored in _sciviz/colormaps/gifs_ as seismic.gif and the images used to make it will be stored in  _sciviz/colormaps/images_ in the final_images_for_gif_seismic folder
+The code is appropriately commented and can be modified to change the visualizations.
+
+NOTE:
+1. Note that each colormap takes about 8 seconds to generate so the time to generate visualizations for a large number of days   will be long
+
 #### Contour Plots
 Go to _sciviz/contourplots/code_ and run the python files present there. The gifs will be stored in _sciviz/contourplots/gifs_, and the images in _sciviz/contourplots/images_. The code is appropriately commented and can be tweaked to change the visualizations.
 
