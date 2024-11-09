@@ -176,72 +176,72 @@ def plot_tmmx_discrete(day, ax, colormap, levels=None):
 
 
 
-def save_tmmx_plots(days,base_output_dir='../images/different_approaches'):
+def save_tmmx_plots(days,base_output_dir='../images/different_experiments'):
     # """
-    # Save temperature plots with different colormapping approaches
+    # Save temperature plots with different colormapping experiments
     # """
-    # 1. Basic Color Schemes
-    sequential_cmaps = ["viridis", "YlOrRd", "Reds"]  # Sequential
-    diverging_cmaps = ["RdBu_r", "RdYlBu_r", "seismic"]  # Diverging
-    perceptual_cmaps = ["magma", "inferno", "cividis"]  # Perceptually uniform
+    # # 1. Basic Color Schemes
+    # sequential_cmaps = ["viridis", "YlOrRd", "Reds"]  # Sequential
+    # diverging_cmaps = ["RdBu_r", "RdYlBu_r", "seismic"]  # Diverging
+    # perceptual_cmaps = ["magma", "inferno", "cividis"]  # Perceptually uniform
     
-    # Create main output directory
-    os.makedirs(base_output_dir, exist_ok=True)
+    # # Create main output directory
+    # os.makedirs(base_output_dir, exist_ok=True)
     
-    # 1. Color Schemes
-    output_dir = os.path.join(base_output_dir, '1_color_schemes')
-    os.makedirs(output_dir, exist_ok=True)
-    
-    for cmap in sequential_cmaps + diverging_cmaps + perceptual_cmaps:
-        category = 'sequential' if cmap in sequential_cmaps else 'diverging' if cmap in diverging_cmaps else 'perceptual'
-        for day in days:
-            print(f'Processing basic scheme - {category} - {cmap} - day {day}')
-            fig, ax = plt.subplots(figsize=(10, 8))
-            plot_tmmx(day, ax, cmap)
-            plt.savefig(os.path.join(output_dir, f'day_{day:03d}_{category}_{cmap}.png'),
-                       dpi=300, bbox_inches='tight')
-            plt.close(fig)
-    
-    # #2. Scaling Approaches
-
-    # # Output directory
-    # output_dir = os.path.join(base_output_dir, '2_scaling_approaches')
+    # # 1. Color Schemes
+    # output_dir = os.path.join(base_output_dir, '1_color_schemes')
     # os.makedirs(output_dir, exist_ok=True)
-    # # Scaling approaches
-    # scaling_types = ['global','local','logarithmic']
-
-    # # Process each day and scaling type
-    # for day in days:
-    #     print(f'Processing scaling approaches - day {day}')
-        
-    #     for scale_type in scaling_types:
+    
+    # for cmap in sequential_cmaps + diverging_cmaps + perceptual_cmaps:
+    #     category = 'sequential' if cmap in sequential_cmaps else 'diverging' if cmap in diverging_cmaps else 'perceptual'
+    #     for day in days:
+    #         print(f'Processing basic scheme - {category} - {cmap} - day {day}')
     #         fig, ax = plt.subplots(figsize=(10, 8))
-    #         plot_tmmx_with_scale(day, ax, colormap='seismic', scaling_type=scale_type)
-            
-    #         # Save plot
-    #         output_path = os.path.join(output_dir, f'day_{day:03d}_scale_{scale_type}.png')
-    #         plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    #         plot_tmmx(day, ax, cmap)
+    #         plt.savefig(os.path.join(output_dir, f'day_{day:03d}_{category}_{cmap}.png'),
+    #                    dpi=300, bbox_inches='tight')
     #         plt.close(fig)
     
-    # 3. Discretization Methods
-    output_dir = os.path.join(base_output_dir, '3_discretization')
+    #2. Scaling Approaches
+
+    # Output directory
+    output_dir = os.path.join(base_output_dir, '2_scaling_approaches')
     os.makedirs(output_dir, exist_ok=True)
-    
-    discretizations = {
-        'continuous': None,
-        'discrete_5deg': np.arange(-10, 56, 5),  # [-10, -5, 0, 5, ..., 50, 55]
-        'discrete_10deg': np.arange(-10, 66, 10), # [-10, 0, 10, ..., 60]
-    }
-   
+    # Scaling approaches
+    scaling_types = ['global','local','logarithmic']
+
+    # Process each day and scaling type
     for day in days:
-        print(f'Processing discretization methods - day {day}')
-        for discr_name, levels in discretizations.items():
+        print(f'Processing scaling approaches - day {day}')
+        
+        for scale_type in scaling_types:
             fig, ax = plt.subplots(figsize=(10, 8))
-            plot_tmmx_discrete(day, ax, 'seismic', levels)
-            plt.savefig(os.path.join(output_dir, f'day_{day:03d}_discrete_{discr_name}.png'),
-                       dpi=300, bbox_inches='tight')
-            plt.close(fig)
+            plot_tmmx_with_scale(day, ax, colormap='seismic', scaling_type=scale_type)
             
-days=[27] # For choosing different color palettes and discretization
-# days=[1,45,91] # For different scaling algorithms
+            # Save plot
+            output_path = os.path.join(output_dir, f'day_{day:03d}_scale_{scale_type}.png')
+            plt.savefig(output_path, dpi=300, bbox_inches='tight')
+            plt.close(fig)
+    
+    # # 3. Discretization Methods
+    # output_dir = os.path.join(base_output_dir, '3_discretization')
+    # os.makedirs(output_dir, exist_ok=True)
+    
+    # discretizations = {
+    #     'continuous': None,
+    #     'discrete_5deg': np.arange(-10, 56, 5),  # [-10, -5, 0, 5, ..., 50, 55]
+    #     'discrete_10deg': np.arange(-10, 66, 10), # [-10, 0, 10, ..., 60]
+    # }
+   
+    # for day in days:
+    #     print(f'Processing discretization methods - day {day}')
+    #     for discr_name, levels in discretizations.items():
+    #         fig, ax = plt.subplots(figsize=(10, 8))
+    #         plot_tmmx_discrete(day, ax, 'seismic', levels)
+    #         plt.savefig(os.path.join(output_dir, f'day_{day:03d}_discrete_{discr_name}.png'),
+    #                    dpi=300, bbox_inches='tight')
+    #         plt.close(fig)
+            
+# days=[27] # For choosing different color palettes and discretization
+days=[1,45,91] # For different scaling algorithms
 save_tmmx_plots(days) 
