@@ -17,6 +17,7 @@ or
 In _sciviz/data_, do the following -
 
 ```chmod +x get_data.sh && ./get_data.sh```
+
 ```python3 clip.py```
 
 This will download the datasets and clip them from June 1 to August 31.
