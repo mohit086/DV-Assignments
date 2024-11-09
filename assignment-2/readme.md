@@ -54,20 +54,14 @@ There is no code. Just open the chinese_buddhism.gephi file to see the graphs. T
 
 #### Parallel Coordinates Plots
 
-Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension.
-
-Navigate to _infoviz/pcp_ and run ```live-server```.
-
-Click on the link to see the directory structure, and navigate appropriately to pcp_variant1.html, pcp_variant2.html, pcp_variant3.html.
-
-The interactions and uses of all the plots are explained in the report. Plot images are saved in _infoviz/pcp/images_.
+Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension. \
+Navigate to _infoviz/pcp_ and run ```live-server```. \
+Click on the link to see the directory structure, and navigate appropriately to pcp_variant1.html, pcp_variant2.html, pcp_variant3.html. \
+The interactions and uses of all the plots are explained in the report. Plot images are saved in _infoviz/pcp/images_. \
 
 #### Treemaps
 
-Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension.
-
-Navigate to _infoviz/treemap_ and run ```live-server```.
-
-Click on the link to see the directory structure, and navigate appropriately to treemap1.html, treemap2.html, treemap3.html.
-
-The interactions and uses of all the treemaps are explained in the report. Treemap images are saved in _infoviz/treemap/images_.
+Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension. \
+Navigate to _infoviz/treemap_ and run ```live-server```. \
+Click on the link to see the directory structure, and navigate appropriately to treemap1.html, treemap2.html, treemap3.html. \
+The interactions and uses of all the treemaps are explained in the report. Treemap images are saved in _infoviz/treemap/images_. \
