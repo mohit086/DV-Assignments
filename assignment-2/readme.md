@@ -4,11 +4,11 @@ There are two main folders - _sciviz_ and _infoviz_ each of them with their own 
 
 Ensure you have the required libraries -
 
-```pip install numpy pandas matplotlib basemap imageio xarray scipy```
+```pip install numpy pandas matplotlib basemap imageio xarray scipy cartopy```
 
 or 
 
-```conda install numpy pandas matplotlib basemap imageio xarray scipy```
+```conda install numpy pandas matplotlib basemap imageio xarray scipy cartopy```
 
 ## Scientific Visualizations
 
@@ -62,3 +62,12 @@ The plots, their interactions and uses are explained in the report
 The images of the plots are also present in the images directory
 
 #### Treemaps
+
+First install live-server or http-server using the sudo command
+npm i live-server
+Now navigate to the root directory of the project and type live-server
+Click on the link to see the directory structure
+click on assignment-2 > infoviz > treemap > treemap1 to see the first treemap and follow a similar process for 
+treemap 2 and treemap 3 to view the second and third treemap respectively.
+All three treemaps are described in detail in the report
+The images of the treemaps are also present in the images directory
