@@ -4,11 +4,11 @@ There are two main folders - _sciviz_ and _infoviz_ each of them with their own 
 
 Ensure you have the required libraries -
 
-```pip install numpy pandas matplotlib basemap imageio xarray scipy cartopy```
+```pip install numpy pandas matplotlib basemap imageio xarray scipy cartopy netCDF4```
 
 or 
 
-```conda install numpy pandas matplotlib basemap imageio xarray scipy cartopy```
+```conda install numpy pandas matplotlib basemap imageio xarray scipy cartopy netCDF4```
 
 ## Scientific Visualizations
 
