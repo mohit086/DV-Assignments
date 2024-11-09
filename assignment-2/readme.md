@@ -38,14 +38,14 @@ Go to _sciviz/colormaps/code_ .
 
 For viewing different experiments on the maximum temperature colormap, run different_approaches.py 
 The images will be stored in _sciviz/colormaps/images_ in the different_approaches folder.
-The 'days' list in different_approaches.py takes the index of days for which the colormaps have to be made. I have used days=[27] for color palette and discretization experiments and days=[1,45,91] for scaling approaches in the report but you can tweak the days list to modify the days on which the visualizations are generated.
+The 'days' list in different_approaches.py takes the index of days for which the colormaps have to be made. I have used days = [27] for color palette and discretization experiments and days = [1,45,91] for scaling approaches in the report but you can tweak the days list to modify the days on which the visualizations are generated.
 Index 0 corresponds to June 1 and so on until index 91 which corresponds to August 31. 
 
 For viewing the plots of significant weather events during this period run inferences.py
 The images will be stored in _sciviz/colormaps/images_ in the inferences folder
 
-For viewing the GIF of maximum temperature run gif_maker.py
-The GIF will be stored in _sciviz/colormaps/gifs_ as seismic.gif and the images used to make it will be stored in  _sciviz/colormaps/images_ in the final_images_for_gif_seismic folder
+For viewing the GIF of maximum temperature run gif_maker.py.
+The GIF will be stored in _sciviz/colormaps/gifs_ as seismic.gif and the images used to make it will be stored in  _sciviz/colormaps/images_ in the final_images_for_gif_seismic folder.
 The code is appropriately commented and can be modified to change the visualizations.
 
 NOTE:
@@ -71,7 +71,6 @@ There is no code. Just open the chinese_buddhism.gephi file to see the graphs. T
 
 #### Parallel Coordinates Plots
 
-<<<<<<< HEAD
 First install live-server or http-server using the sudo command
 npm i live-server
 Now navigate to the root directory of the project and type live-server
@@ -79,12 +78,6 @@ Click on the link to see the directory structure
 click on assignment-2 > infoviz > pcp > code > pcp_variant1.html to see the first three plots and similarly pcp_variant2.html to see the next three plots
 The plots, their interactions and uses are explained in the report
 The images of the plots are also present in the images directory
-=======
-Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension. \
-Navigate to _infoviz/pcp_ and run ```live-server```. \
-Click on the link to see the directory structure, and navigate appropriately to pcp_variant1.html, pcp_variant2.html, pcp_variant3.html. \
-The interactions and uses of all the plots are explained in the report. Plot images are saved in _infoviz/pcp/images_. \
->>>>>>> 7b20f2e3eb87deac4761c9e37364458ed75750d0
 
 #### Treemaps
 
