@@ -141,7 +141,7 @@ function addBackButton() {
 }
 
 function initVisualization() {
-  Promise.all([d3.csv("./nodes.csv"), d3.csv("./edges.csv")])
+  Promise.all([d3.csv("../../data/nodes.csv"), d3.csv("../../data/edges.csv")])
     .then(([nodesData, edgesData]) => {
       globalEdgesData = edgesData;
       globalNodesData = nodesData;
