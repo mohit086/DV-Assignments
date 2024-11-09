@@ -54,21 +54,20 @@ There is no code. Just open the chinese_buddhism.gephi file to see the graphs. T
 
 #### Parallel Coordinates Plots
 
-First install live-server or http-server using the sudo command
-npm i live-server
-Now navigate to the root directory of the project and type live-server
-Click on the link to see the directory structure
-click on assignment-2 > infoviz > code > pcp_variant1.html to see the first three plots and similarly pcp_variant2.html to see the next three plots
-The plots, their interactions and uses are explained in the report
-The images of the plots are also present in the images directory
+Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension.
+
+Navigate to _infoviz/pcp_ and run ```live-server```.
+
+Click on the link to see the directory structure, and navigate appropriately to pcp_variant1.html, pcp_variant2.html, pcp_variant3.html.
+
+The interactions and uses of all the plots are explained in the report. Plot images are saved in _infoviz/pcp/images_.
 
 #### Treemaps
 
-First install live-server or http-server using the sudo command
-npm i live-server
-Now navigate to the root directory of the project and type live-server
-Click on the link to see the directory structure
-click on assignment-2 > infoviz > treemap > treemap1 to see the first treemap and follow a similar process for 
-treemap 2 and treemap 3 to view the second and third treemap respectively.
-All three treemaps are described in detail in the report
-The images of the treemaps are also present in the images directory
+Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension.
+
+Navigate to _infoviz/treemap_ and run ```live-server```.
+
+Click on the link to see the directory structure, and navigate appropriately to treemap1.html, treemap2.html, treemap3.html.
+
+The interactions and uses of all the treemaps are explained in the report. Treemap images are saved in _infoviz/treemap/images_.
