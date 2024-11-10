@@ -50,7 +50,8 @@ Note that each colormap takes about 8 seconds to generate, so the time raken to 
 Go to _sciviz/contourplots/code_ and run the python files present there. The gifs will be stored in _sciviz/contourplots/gifs_, and the images in _sciviz/contourplots/images_. The code is appropriately commented and can be tweaked to change the visualizations.
 
 NOTE:
-1. Note that the images folder contains files either named in the format day{index} or with a specific date present in them. The specific dated files correspond to maps generated using cartopy while the others correspond to maps generated using basemap. \
+1. Note that the images folder contains files either named in the format day{index} or with a specific date present in them. The specific dated files correspond to maps generated using cartopy while the others correspond to maps generated using basemap.
+   
 2. Experimental images that show only contour lines or those that use only the contour fill alone aren't shown here. Refer to the report for the same.
 
 ## Information Visualizations
