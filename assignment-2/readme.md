@@ -1,5 +1,7 @@
 # Instructions
 
+Repo link - https://github.com/mohit086/DV-Assignments/tree/main/assignment-2
+
 There are two main folders - _sciviz_ and _infoviz_ each of them with their own data, images/gifs and code.
 
 Ensure you have the required libraries -
@@ -20,7 +22,7 @@ In _sciviz/data_, do the following -
 
 ```python3 clip.py```
 
-This will download the datasets and clip them from June 1 to August 31.
+This will download the datasets and clip them from June 1 to August 31. Clipped datasets are also available in the releases section of the repository.
 
 #### Quiver Plots
 
