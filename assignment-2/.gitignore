@@ -1,4 +1,5 @@
 venv/
 assignment-2/infoviz/node_modules/
-assignment-2/sciviz/*.nc
+*.nc
+*.csv
 dump/
