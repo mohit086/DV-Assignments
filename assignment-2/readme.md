@@ -69,17 +69,14 @@ Run _preprocessing.py_ present in _infoviz/data_ (ensure chinese_buddhism.gexf i
 
 #### Node-Link Diagrams
 
-There is no code. Just open the chinese_buddhism.gephi file to see the graphs. The saved images are present in _nodelink/images_.
+There is no code. Just open the chinese_buddhism.gephi file to see the graphs. The images are present in _infoviz/nodelink/images_.
 
 #### Parallel Coordinates Plots
 
-First install live-server or http-server using the sudo command
-npm i live-server
-Now navigate to the root directory of the project and type live-server
-Click on the link to see the directory structure
-click on assignment-2 > infoviz > pcp > code > pcp_variant1.html to see the first three plots and similarly pcp_variant2.html to see the next three plots
-The plots, their interactions and uses are explained in the report
-The images of the plots are also present in the images directory
+Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension. \
+Navigate to _infoviz/pcp_ and run ```live-server```. \
+Click on the link to see the directory structure, and navigate appropriately to pcp_variant1.html, pcp_variant2.html, pcp_variant3.html. \
+The interactions and uses of all the plots are explained in the report. Treemap images are saved in _infoviz/pcp/images_. \
 
 #### Treemaps
 
