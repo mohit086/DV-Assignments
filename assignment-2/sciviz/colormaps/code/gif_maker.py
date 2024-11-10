@@ -25,7 +25,7 @@ def plot_tmmx(day,ax,colormap,norm=None):
     
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
-    # Format the date to display as "June 1st," "June 2nd," etc.
+    # Format the date to display
     date_str = current_date.strftime("%B %d")
 
     # print('Latitudes shape:', latitudes.shape)
@@ -49,7 +49,6 @@ def plot_tmmx(day,ax,colormap,norm=None):
     lat_edges = np.concatenate([[latitudes[0] - dy], latitudes + dy])
     if norm is None:
         norm = Normalize(vmin=-10, vmax=55)
-    # Convert lat/lon to map projection coordinates
     lon_grid, lat_grid = np.meshgrid(lon_edges, lat_edges)
     x, y = m(lon_grid, lat_grid)
     # Create color map using pcolormesh
@@ -74,7 +73,7 @@ def plot_tmmx(day,ax,colormap,norm=None):
 def save_tmmx_images(days, colourmap):
     output_dir='../images/final_images_for_gif_'+colourmap
     os.makedirs(output_dir, exist_ok=True)
-    start_date = datetime.datetime(2024, 6, 1)  # Starting date (June 1, 2024)
+    start_date = datetime.datetime(2021, 6, 1)  # Starting date (June 1, 2021)
     
     for day in days:
         fig, ax = plt.subplots(1, 1, figsize=(7, 8))

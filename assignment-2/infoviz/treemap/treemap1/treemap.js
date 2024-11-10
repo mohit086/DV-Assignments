@@ -120,7 +120,6 @@ function createTreemap(nodesData, view = "nationality", selectedNat = null) {
   processNode(hierarchyData);
 
   // Create color scheme
-  // Apply colors
   plotlyData[0].marker.colors = plotlyData[0].labels.map((label, i) => {
     const parent = plotlyData[0].parents[i];
     if (parent === "") return "#ffffff"; // root
@@ -164,48 +163,6 @@ function resizeVisualization() {
 
 window.addEventListener("resize", resizeVisualization);
 
-// Create legend
-// function createLegend(nodesData) {
-//   const legendDiv = document.getElementById("nationalityLegend");
-//   legendDiv.innerHTML = ""; // Clear existing legend
-
-//   if (currentView === "nationality") {
-//     [...new Set(nodesData.map((d) => d.nationality))].forEach((nationality) => {
-//       const legendItem = document.createElement("div");
-//       legendItem.className = "legend-item";
-
-//       const colorBox = document.createElement("div");
-//       colorBox.className = "legend-color";
-//       colorBox.style.backgroundColor =
-//         DYNASTY_COLORS[DYNASTY_TRANSLATIONS[nationality]] || "#bdbdbd";
-
-//       const label = document.createElement("span");
-//       label.textContent = DYNASTY_TRANSLATIONS[nationality] || nationality;
-
-//       legendItem.appendChild(colorBox);
-//       legendItem.appendChild(label);
-//       legendDiv.appendChild(legendItem);
-//     });
-//   } else {
-//     // Gender legend
-//     Object.entries(GENDER_COLORS).forEach(([gender, color]) => {
-//       const legendItem = document.createElement("div");
-//       legendItem.className = "legend-item";
-
-//       const colorBox = document.createElement("div");
-//       colorBox.className = "legend-color";
-//       colorBox.style.backgroundColor = color;
-
-//       const label = document.createElement("span");
-//       label.textContent = gender === "1" ? "Male" : "Female";
-
-//       legendItem.appendChild(colorBox);
-//       legendItem.appendChild(label);
-//       legendDiv.appendChild(legendItem);
-//     });
-//   }
-// }
-
 // Handle click events
 function handleClick(eventData) {
   if (!eventData || !eventData.points || eventData.points.length === 0) return;
@@ -231,7 +188,6 @@ function handleClick(eventData) {
     // Update visualization
     const plotlyData = createTreemap(globalNodesData, "gender", nationalityKey);
     Plotly.react("treemap", plotlyData, layout);
-    // createLegend(globalNodesData);
 
     // Add back button
     addBackButton();
@@ -264,7 +220,6 @@ function addBackButton() {
 
       const plotlyData = createTreemap(globalNodesData, "nationality");
       Plotly.react("treemap", plotlyData, layout);
-      // createLegend(globalNodesData);
 
       backButton.remove();
     });
@@ -273,7 +228,6 @@ function addBackButton() {
   }
 }
 
-// Add this function after your other functions
 function addAlgorithmSelector() {
   const container = document.getElementById("treemap").parentElement;
 
@@ -322,7 +276,6 @@ function initVisualization() {
     .then(([nodesData, edgesData]) => {
       globalNodesData = nodesData;
       const plotlyData = createTreemap(nodesData, "nationality");
-      // createLegend(nodesData);
 
       // Create treemap with click handler
       Plotly.newPlot("treemap", plotlyData, layout).then((gd) => {
@@ -334,7 +287,6 @@ function initVisualization() {
     .catch((error) => console.error("Error loading data:", error));
 }
 
-// Add necessary CSS
 const style = document.createElement("style");
 style.textContent = `
   #nationalityLegend {
@@ -356,6 +308,4 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
-
-// Initialize visualization when DOM is ready
 document.addEventListener("DOMContentLoaded", initVisualization);
