@@ -68,7 +68,7 @@ There is no code. Just open the chinese_buddhism.gephi file to see the graphs. T
 
 Install _http-server_ or _live-server_ using the command ```npm i live-server``` or ensure you have the VSCode Live Server Extension. \
 Navigate to _infoviz/pcp_ and run ```live-server```. \
-Click on the link to see the directory structure, and navigate appropriately to pcp_variant1.html, pcp_variant2.html, pcp_variant3.html. \
+Click on the link to see the directory structure, and navigate appropriately to the relevant html files. \
 The interactions and uses of all the plots are explained in the report. Treemap images are saved in _infoviz/pcp/images_.
 
 #### Treemaps
