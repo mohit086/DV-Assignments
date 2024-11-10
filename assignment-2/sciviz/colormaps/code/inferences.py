@@ -22,7 +22,7 @@ def plot_tmmx(day,ax,colourmap,norm=None):
     t_max_slice= t_max_celsius[day, :, :]
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
-    # Format the date to display as "June 1st," "June 2nd," etc.
+    # Format the date to display 
     date_str = current_date.strftime("%B %d")
     
     # print('Latitudes shape:', latitudes.shape)
@@ -80,12 +80,11 @@ def plot_tmmn(day,ax,colourmap):
     t_min_slice= t_min_celsius[day, :, :]
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
-    # Format the date to display as "June 1st," "June 2nd," etc.
+    # Format the date to display 
     date_str = current_date.strftime("%B %d")
     
     # print('Latitudes shape:', latitudes.shape)
     # print('Longitudes shape:', longitudes.shape)
-    # print('Temperature slice shape:', t_min_slice.shape)
     
     # Create a Basemap instance
     
@@ -103,7 +102,6 @@ def plot_tmmn(day,ax,colourmap):
     dy = np.diff(latitudes)[0]/2.0
     lon_edges = np.concatenate([[longitudes[0] - dx], longitudes + dx])
     lat_edges = np.concatenate([[latitudes[0] - dy], latitudes + dy])
-    # Convert lat/lon to map projection coordinates
     lon_grid, lat_grid = np.meshgrid(lon_edges, lat_edges)
     x, y = m(lon_grid, lat_grid)
     # Create color map using pcolormesh
@@ -136,7 +134,7 @@ def plot_srad(day,ax,colourmap):
     srad_slice= srad[day, :, :]
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
-    # Format the date to display as "June 1st," "June 2nd," etc.
+    # Format the date to display 
     date_str = current_date.strftime("%B %d")
     
     # print('Latitudes shape:', latitudes.shape)
@@ -158,7 +156,6 @@ def plot_srad(day,ax,colourmap):
     dy = np.diff(latitudes)[0]/2.0
     lon_edges = np.concatenate([[longitudes[0] - dx], longitudes + dx])
     lat_edges = np.concatenate([[latitudes[0] - dy], latitudes + dy])
-    # Convert lat/lon to map projection coordinates
     lon_grid, lat_grid = np.meshgrid(lon_edges, lat_edges)
     x, y = m(lon_grid, lat_grid)
     # Create color map using pcolormesh
@@ -192,7 +189,7 @@ def plot_bi(day,ax,colourmap):
     bi_slice= bi[day, :, :] 
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
-    # Format the date to display as "June 1st," "June 2nd," etc.
+    # Format the date to display 
     date_str = current_date.strftime("%B %d")
     
     
@@ -210,13 +207,10 @@ def plot_bi(day,ax,colourmap):
     m.drawcoastlines()
     m.drawcountries()
 
-    # Convert lat/lon to map projection coordinates
     dx = np.diff(longitudes)[0]/2.0
     dy = np.diff(latitudes)[0]/2.0
     lon_edges = np.concatenate([[longitudes[0] - dx], longitudes + dx])
     lat_edges = np.concatenate([[latitudes[0] - dy], latitudes + dy])
-    
-    # Convert lat/lon to map projection coordinates
     lon_grid, lat_grid = np.meshgrid(lon_edges, lat_edges)
     x, y = m(lon_grid, lat_grid)
     # Create color map using pcolormesh
@@ -245,12 +239,12 @@ def plot_erc(day,ax,colourmap):
     longitudes = dataset['lon'].values
     
     req_thing = 'energy_release_component-g'
-    bi = dataset.variables[req_thing].values  
+    erc = dataset.variables[req_thing].values  
     
-    bi_slice= bi[day, :, :]  
+    erc_slice= erc[day, :, :]  
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
-    # Format the date to display as "June 1st," "June 2nd," etc.
+    # Format the date to display 
     date_str = current_date.strftime("%B %d")
 
     # print('Latitudes shape:', latitudes.shape)
@@ -272,11 +266,10 @@ def plot_erc(day,ax,colourmap):
     dy = np.diff(latitudes)[0]/2.0
     lon_edges = np.concatenate([[longitudes[0] - dx], longitudes + dx])
     lat_edges = np.concatenate([[latitudes[0] - dy], latitudes + dy])
-    # Convert lat/lon to map projection coordinates
     lon_grid, lat_grid = np.meshgrid(lon_edges, lat_edges)
     x, y = m(lon_grid, lat_grid)
     # Create color map using pcolormesh
-    mesh = m.pcolormesh(x, y, bi_slice, cmap=colourmap, shading='auto', ax=ax)
+    mesh = m.pcolormesh(x, y, erc_slice, cmap=colourmap, shading='auto', ax=ax)
 
     # Add colorbar
     cbar = plt.colorbar(mesh, ax=ax, orientation='vertical', fraction=0.046, pad=0.04)
@@ -308,7 +301,7 @@ def plot_fm100(day,ax,colourmap):
     fm100_slice= fm100[day, :, :] 
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
-    # Format the date to display as "June 1st," "June 2nd," etc.
+    # Format the date to display 
     date_str = current_date.strftime("%B %d")
   
     # print('Latitudes shape:', latitudes.shape)
@@ -331,7 +324,6 @@ def plot_fm100(day,ax,colourmap):
     dy = np.diff(latitudes)[0]/2.0
     lon_edges = np.concatenate([[longitudes[0] - dx], longitudes + dx])
     lat_edges = np.concatenate([[latitudes[0] - dy], latitudes + dy])
-    # Convert lat/lon to map projection coordinates
     lon_grid, lat_grid = np.meshgrid(lon_edges, lat_edges)
     x, y = m(lon_grid, lat_grid)
     # Create color map using pcolormesh
@@ -367,7 +359,7 @@ def plot_fm1000(day,ax,colourmap):
     fm1000_slice= fm1000[day, :, :] 
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
-    # Format the date to display as "June 1st," "June 2nd," etc.
+    # Format the date to display 
     date_str = current_date.strftime("%B %d")
   
     # print('Latitudes shape:', latitudes.shape)
@@ -390,7 +382,6 @@ def plot_fm1000(day,ax,colourmap):
     dy = np.diff(latitudes)[0]/2.0
     lon_edges = np.concatenate([[longitudes[0] - dx], longitudes + dx])
     lat_edges = np.concatenate([[latitudes[0] - dy], latitudes + dy])
-    # Convert lat/lon to map projection coordinates
     lon_grid, lat_grid = np.meshgrid(lon_edges, lat_edges)
     x, y = m(lon_grid, lat_grid)
     # Create color map using pcolormesh
@@ -415,7 +406,7 @@ def save_images(days, dataset_type, colourmap, event_name):
    output_dir = os.path.join(base_dir, event_name)
    os.makedirs(output_dir, exist_ok=True)
    
-   start_date = datetime.datetime(2024, 6, 1)
+   start_date = datetime.datetime(2021, 6, 1)
 
    # Dictionary mapping dataset types to their plotting functions and titles
    dataset_info = {
@@ -461,7 +452,7 @@ def save_images(days, dataset_type, colourmap, event_name):
        
        # Calculate the current date
        current_date = start_date + datetime.timedelta(days=day)
-       date_str = current_date.strftime("%d%B").lower()  # Format as '21june'
+       date_str = current_date.strftime("%d%B").lower()
        
        # Update the title
        ax.set_title(f"{title_prefix} - {current_date.strftime('%B %d')}")
@@ -473,7 +464,7 @@ def save_images(days, dataset_type, colourmap, event_name):
                    dpi=300, bbox_inches='tight')
        plt.close(fig)
 
-# Simplified list of events
+# List of important weather events during the period
 events = {
     'pacific_northwest_heatwave': {
         'days': [27],  # June 28

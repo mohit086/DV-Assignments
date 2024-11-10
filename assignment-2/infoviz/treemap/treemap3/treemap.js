@@ -185,8 +185,6 @@ function addAlgorithmSelector() {
   // Create a container for the dropdown
   const container = document.createElement("div");
   container.style.marginBottom = "10px";
-
-  // Create a label for the dropdown
   const label = document.createElement("label");
   label.textContent = "";
   label.style.marginRight = "10px";
@@ -198,7 +196,7 @@ function addAlgorithmSelector() {
   // Define the list of algorithms
   const algorithms = ["squarify", "binary", "slice", "dice"];
 
-  // Populate the dropdown with options
+
   algorithms.forEach((algo) => {
     const option = document.createElement("option");
     option.value = algo;
@@ -218,11 +216,8 @@ function addAlgorithmSelector() {
     Plotly.react("treemap", plotlyData, layout);
   };
 
-  // Add label and select dropdown to the container
   container.appendChild(label);
   container.appendChild(select);
-
-  // Insert the container before the treemap element
   document.body.insertBefore(container, document.getElementById("treemap"));
 }
 
@@ -252,7 +247,6 @@ function handleClick(eventData) {
   const parentName = point.parent;
   const dynastyName = point.label;
 
-  // Only handle clicks on first-level dynasty nodes
   if (currentView === "dynasty" && parentName === "Chinese Buddhist Figures") {
     selectedDynasty = Object.keys(DYNASTY_TRANSLATIONS).find(
       (key) => DYNASTY_TRANSLATIONS[key] === dynastyName
