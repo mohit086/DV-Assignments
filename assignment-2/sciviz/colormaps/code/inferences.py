@@ -239,9 +239,9 @@ def plot_erc(day,ax,colourmap):
     longitudes = dataset['lon'].values
     
     req_thing = 'energy_release_component-g'
-    bi = dataset.variables[req_thing].values  
+    erc = dataset.variables[req_thing].values  
     
-    bi_slice= bi[day, :, :]  
+    erc_slice= erc[day, :, :]  
     start_date = datetime.datetime(2021, 6, 1)
     current_date = start_date + datetime.timedelta(days=day)
     # Format the date to display 
@@ -269,7 +269,7 @@ def plot_erc(day,ax,colourmap):
     lon_grid, lat_grid = np.meshgrid(lon_edges, lat_edges)
     x, y = m(lon_grid, lat_grid)
     # Create color map using pcolormesh
-    mesh = m.pcolormesh(x, y, bi_slice, cmap=colourmap, shading='auto', ax=ax)
+    mesh = m.pcolormesh(x, y, erc_slice, cmap=colourmap, shading='auto', ax=ax)
 
     # Add colorbar
     cbar = plt.colorbar(mesh, ax=ax, orientation='vertical', fraction=0.046, pad=0.04)
