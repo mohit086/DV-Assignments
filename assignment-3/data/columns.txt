@@ -1,0 +1,26 @@
+PreviousLoanDefaults - 0 or 1
+EducationLevel - String (Bachelor, Master, High School)
+CreditCardUtilizationRate - 0 to 1
+LoanApproved - 0 or 1
+JobTenure - In years
+BankruptcyHistory - 0 or 1
+NumberOfCreditInquiries - Number
+TotalLiabilities - Amount 
+HomeOwnershipStatus - Rent, Mortgage, Other
+Age - In years
+SavingsAccountBalance - Amount
+DebtToIncomeRatio - 0 to 1
+EmploymentStatus - Unemployed, Employed, Self-Employed
+NumberOfDependents - Number
+MaritalStatus - Single, Widowed, Divorced
+LengthOfCreditHistory - In years
+LoanPurpose - Education, Home, Auto, Debt Consolidation
+CreditScore - Number
+TotalAssets - Amount
+InterestRate - 0 to 1
+AnnualIncome - Amount
+LoanDuration - In years
+CheckingAccountBalance - Amount
+LoanAmount - Amount
+MonthlyDebtPayments - Amount
+NumberOfOpenCreditLines - Number
