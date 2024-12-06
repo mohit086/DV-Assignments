@@ -1,16 +1,17 @@
-import pandas as pd
-import squarify
-import plotly.graph_objects as go
-import numpy as np
-import sys
 import os
-import matplotlib.pyplot as plt
+import sys
+import squarify
+import numpy as np
+import pandas as pd
 import matplotlib.cm as cm
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
+
 df = pd.read_csv('../data/base.csv')
 os.makedirs('images',exist_ok=True)
 
@@ -39,7 +40,6 @@ plt.figure(figsize=(12, 8))
 ax = plt.gca()
 squarify.plot(sizes=sizes, label=labels, color=colors, alpha=0.8, edgecolor='white', linewidth=3)
 plt.axis('off')
-plt.title('Treemap of Credit Card Utilization Rate and Debt-to-Income Ratio Categories', fontsize=18)
 plt.savefig('images/fig1.png', bbox_inches='tight')
 plt.close()
 
@@ -62,10 +62,8 @@ plt.figure(figsize=(12, 8))
 ax = plt.gca()
 squarify.plot(sizes=sizes, label=labels, color=colors, alpha=0.8, edgecolor='white', linewidth=3)
 plt.axis('off')
-plt.title('Treemap of Age and Loan Amount Categories', fontsize=18)
 plt.savefig('images/fig2.png', bbox_inches='tight')
 plt.close()
-
 
 # ---------------------------------------------------------------------------------------------------------------
 
@@ -87,15 +85,12 @@ liabilities_ratio_counts = liabilities_ratio_category.value_counts().sort_index(
 
 plt.figure(figsize=(6, 6))
 plt.pie(savings_ratio_counts, labels=savings_labels, autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
-plt.title('Savings to Income Ratio (Denied Loans)')
 plt.savefig('images/fig3.png', bbox_inches='tight')
 plt.figure(figsize=(6, 6))
 plt.pie(credit_lines_counts, labels=credit_labels, autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
-plt.title('Number of Open Credit Lines (Denied Loans)')
 plt.savefig('images/fig4.png', bbox_inches='tight')
 plt.figure(figsize=(6, 6))
 plt.pie(liabilities_ratio_counts, labels=liabilities_labels, autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
-plt.title('Liabilities to Assets Ratio (Denied Loans)')
 plt.savefig('images/fig5.png', bbox_inches='tight')
 plt.close()
 
@@ -166,8 +161,6 @@ fig = go.Figure(go.Sankey(
 ))
 
 fig.update_layout(
-    title_text="Sankey Diagram of Loan Decision Flow",
-    font_size=12,
     paper_bgcolor="white",
     annotations=annotations
 )
@@ -241,10 +234,8 @@ ax_scatter.set_xlabel("Credit Card Utilization Rate")
 ax_scatter.set_ylabel("Debt to Income Ratio")
 ax_scatter.legend()
 plt.tight_layout()
-
 plt.savefig('images/fig8.png', bbox_inches='tight')
 plt.close()
-
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -282,10 +273,8 @@ for cluster in range(4):
     )
     axes[cluster].set_ylim(0, max(approval_counts) + 2)
 plt.tight_layout()
-
 plt.savefig('images/fig9.png', bbox_inches='tight')
 plt.close()
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -310,7 +299,6 @@ ax.set_xlabel('Cluster', fontsize=12)
 ax.set_ylabel('Number of Loans', fontsize=12)
 ax.legend(['Loan Denied', 'Loan Approved'], title='Loan Status')
 plt.tight_layout()
-
 plt.savefig('images/fig10.png', bbox_inches='tight')
 plt.close()
 
@@ -346,34 +334,33 @@ plt.tight_layout()
 plt.savefig('images/fig11.png', bbox_inches='tight')
 plt.close()
 
-
 # ----------------------------------------------------------------------------------------------------------------
 
 savings_income_ratio = df['SavingsAccountBalance'] / df['AnnualIncome']
 liability_asset_ratio = df['TotalLiabilities'] / df['TotalAssets']
 credit_card_utilization_normalized = df['CreditCardUtilizationRate'] / df['CreditCardUtilizationRate'].max()
 debt_to_income_normalized = df['DebtToIncomeRatio'] / df['DebtToIncomeRatio'].max()
-savings_income_normalized = savings_income_ratio / savings_income_ratio.max()
 liability_asset_normalized = liability_asset_ratio / liability_asset_ratio.max()
-loan_amount_normalized = df['LoanAmount'] / df['LoanAmount'].max()
+loan_duration_normalized = df['LoanDuration'] / df['LoanDuration'].max()
 age_normalized = df['Age'] / df['Age'].max()
-w1, w2, w3, w4, w5, w6 = 0.1, 0.2, 0.3, 0.2, 0.15, 0.05
+w1, w2, w3, w4, w5 = 0.3,0.3,0.1,0.1,0.2
 behavioural_risk = (
     w1 * credit_card_utilization_normalized +
     w2 * debt_to_income_normalized +
     w3 * liability_asset_normalized +
     w4 * age_normalized +
-    w5 * loan_amount_normalized + 
-    w6 * savings_income_normalized
+    w5 * loan_duration_normalized
 )
 behavioural_risk = (behavioural_risk - behavioural_risk.min()) / (behavioural_risk.max() - behavioural_risk.min())
 df['BehaviouralRisk'] = behavioural_risk
 threshold = 0.7
-risky_loans = df[df['BehaviouralRisk'] > threshold]
-denied_percentage = (
-    risky_loans['LoanApproved'].value_counts(normalize=True).get(0, 0) * 100
-)
+threshold2 = 0.4
+risky_loans = df[df['BehaviouralRisk'] >= threshold]
+good_loans = df[df['BehaviouralRisk'] <= threshold2]
+denied_percentage = (risky_loans['LoanApproved'].value_counts(normalize=True).get(0) * 100)
+allowed_percentage = (good_loans['LoanApproved'].value_counts(normalize=True).get(1) * 100)
 # print(f"Percentage of loans denied for BehaviouralRisk above {threshold}: {denied_percentage:.2f}%")
+# print(f"Percentage of loans denied for BehaviouralRisk below {threshold2}: {allowed_percentage:.2f}%")
 
 # -------------------------------------------------------------------------------------------------------------------------
 
@@ -393,7 +380,6 @@ plt.tight_layout()
 plt.savefig('images/fig12.png', bbox_inches='tight')
 plt.close()
 
-
 # ----------------------------------------------------------------------------------------------------------------
 
 df_sorted = df.sort_values('CreditScore')
@@ -411,7 +397,6 @@ plt.ylabel('BehaviouralRisk', fontsize=14)
 plt.tight_layout()
 plt.savefig('images/fig13.png', bbox_inches='tight')
 plt.close()
-
 
 # ----------------------------------------------------------------------------------------------------------------
 
@@ -431,7 +416,6 @@ plt.tight_layout()
 plt.savefig('images/fig14.png', bbox_inches='tight')
 plt.close()
 
-
 # ----------------------------------------------------------------------------------------------------------------
 
 bin_avg_credit_lines = df.groupby('NumberOfOpenCreditLines')['BehaviouralRisk'].mean().reset_index()
@@ -444,12 +428,11 @@ plt.tight_layout()
 plt.savefig('images/fig15.png', bbox_inches='tight')
 plt.close()
 
-
 # ----------------------------------------------------------------------------------------------------------------
 
 df_copy = df.copy()
 columns_to_drop = [
-    'CreditCardUtilizationRate', 'DebtToIncomeRatio', 'LoanAmount', 'Age',
+    'CreditCardUtilizationRate', 'DebtToIncomeRatio', 'LoanDuration','TotalAssets', 'Age',
     'BehaviouralRisk','TotalLiabilities'
 ]
 df_copy.drop(columns=columns_to_drop, inplace=True)
@@ -465,6 +448,7 @@ y_pred = rf.predict(X_test)
 mse = mean_squared_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 accuracy_percentage = r2 * 100
+print("Accuracy of predicting BehaviouralRisk: ",accuracy_percentage)
 importances = rf.feature_importances_
 
 features = X.columns
@@ -484,12 +468,12 @@ plt.close()
 
 # ----------------------------------------------------------------------------------------------------------------
 
-combinations = pd.crosstab(df['BehaviouralRisk'] > 0.65, df['LoanApproved'] == 1)
+combinations = pd.crosstab(df['BehaviouralRisk'] > 0.7, df['LoanApproved'] == 1)
 labels = [
-    'BehaviouralRisk > 0.65 & Loan Approved',
-    'BehaviouralRisk > 0.65 & Loan Denied',
-    'BehaviouralRisk <= 0.65 & Loan Approved',
-    'BehaviouralRisk <= 0.65 & Loan Denied'
+    'BehaviouralRisk > 0.7 & Loan Approved',
+    'BehaviouralRisk < 0.7 & Loan Denied',
+    'BehaviouralRisk <= 0.7 & Loan Approved',
+    'BehaviouralRisk > 0.7 & Loan Denied'
 ]
 sizes = [
     combinations.loc[True, True] if True in combinations.index and True in combinations.columns else 0,
@@ -500,7 +484,6 @@ sizes = [
 
 plt.figure(figsize=(8, 8))
 plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#66b3ff', '#ff6666', '#99ff99', '#ffcc99'])
-plt.title('Distribution of BehaviouralRisk and Loan Approval Status', fontsize=16)
 plt.axis('equal')
 plt.savefig('images/fig17.png', bbox_inches='tight')
 plt.close('all')
@@ -589,8 +572,6 @@ fig = go.Figure(go.Sankey(
 ))
 
 fig.update_layout(
-    title_text="Sankey Diagram of Loan Decision Flow",
-    font_size=12,
     paper_bgcolor="white",
     annotations=annotations
 )
