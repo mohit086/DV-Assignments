@@ -17,8 +17,7 @@ conda install numpy pandas plotly squarify matplotlib imageio scikit-learn
 ```
 
 ### Data and preprocessing
-Original dataset (Used in Assignment-1) is saved as ```original.csv``` in the _data_ folder. The supplementary dataset is saved as ```supplementary.csv``` in the same location. Run the
-```preproc.py``` file present in ```data``` to create the merged dataset ```base.csv```.
+Original dataset (Used in Assignment-1) is saved as ```original.csv``` in the _data_ folder. The supplementary dataset is saved as ```supplementary.csv``` in the same location. The merged dataset ```base.csv```, which is used for the entire assignment, is created using the ```preproc.py``` file.
 
 ### Workflow 1
 
