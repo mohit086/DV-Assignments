@@ -26,11 +26,9 @@ refer to `https://xgboost.readthedocs.io/en/release_1.3.0/build.html` to figure 
 Original dataset (Used in Assignment-1) is saved as ```original.csv``` in the _data_ folder. The supplementary dataset is saved as ```supplementary.csv``` in the same location. The merged dataset ```base.csv```, which is used for the entire assignment, is created using the ```preproc.py``` file.
 
 ### Workflow 1
-Preferably use the notebook and hit run all. 
-The actual working code is in `final.ipynb` and `final.py`.
+run using python3 `final.py`. The images get saved to ```workflow_1/images/```. Note that it can take some time (a few minutes).
+For a more step by step and interactive experience, use the notebook i.e. `final.ipynb`
 try_stuff is just a bunch of rough work.
-Run the ```final.py``` file in the ```workflow_1``` folder. The images get saved to ```workflow_1/images/```. Note that it can take some time (a few minutes).
-
 
 ### Workflow 2
 
