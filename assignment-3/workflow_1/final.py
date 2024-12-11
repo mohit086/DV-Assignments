@@ -782,10 +782,6 @@ image_counter += 1
 #use shapley to visualize the model
 
 
-
-
-
-
 # Initialize the SHAP TreeExplainer
 explainer = shap.TreeExplainer(best_model)
 
@@ -793,25 +789,33 @@ explainer = shap.TreeExplainer(best_model)
 shap_values = explainer.shap_values(x_validation)
 
 # 1. Summary Plot (Feature importance) using Plotly
-# Use shap.summary_plot to get a plot and capture the figure object
-fig_summary = shap.summary_plot(shap_values, x_validation, max_display=10, show=False)
+# Create the summary plot
+plt.clf()
+shap.summary_plot(shap_values, x_validation, max_display=10, show=False)
 
-# Save the figure as a PNG image
-pio.write_image(fig_summary, f"images/Fig{image_counter}.png")
+# Save the current plot as a PNG image
+fig_summary = plt.gcf()  # Get the current figure (matplotlib)
+fig_summary.savefig(f"images/Fig{image_counter}.png", format="png")
 image_counter += 1
 
 # 2. Feature Importance Bar Plot using Plotly
-fig_bar = shap.summary_plot(shap_values, x_validation, plot_type="bar", show=False)
+# Create the bar plot
+plt.clf()
+shap.summary_plot(shap_values, x_validation, plot_type="bar", show=False)
 
-# Save the figure as a PNG image
-pio.write_image(fig_bar, f"images/Fig{image_counter}.png")
+# Save the current plot as a PNG image
+fig_bar = plt.gcf()  # Get the current figure (matplotlib)
+fig_bar.savefig(f"images/Fig{image_counter}.png", format="png")
 image_counter += 1
 
 # 3. Dependence Plot (For a specific feature, e.g., 'AnnualIncome') using Plotly
-fig_dependence = shap.dependence_plot('AnnualIncome', shap_values, x_validation, show=False)
+# Create the dependence plot
+plt.clf()
+shap.dependence_plot('AnnualIncome', shap_values, x_validation, show=False)
 
-# Save the figure as a PNG image
-pio.write_image(fig_dependence, f"images/Fig{image_counter}.png")
+# Save the current plot as a PNG image
+fig_dependence = plt.gcf()  # Get the current figure (matplotlib)
+fig_dependence.savefig(f"images/Fig{image_counter}.png", format="png")
 image_counter += 1
 
 
