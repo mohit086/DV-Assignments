@@ -27,7 +27,7 @@ Original dataset (Used in Assignment-1) is saved as ```original.csv``` in the _d
 
 ### Workflow 1
 Preferably use the notebook and hit run all. 
-The actual working code is in final.ipynb or final.py.
+The actual working code is in `final.ipynb` and `final.py`.
 try_stuff is just a bunch of rough work.
 Run the ```final.py``` file in the ```workflow_1``` folder. The images get saved to ```workflow_1/images/```. Note that it can take some time (a few minutes).
 
