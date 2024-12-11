@@ -2,7 +2,7 @@
 
 Repo link - https://github.com/mohit086/DV-Assignments/tree/main/assignment-3
 
-There are three folders - one for each workflow - each with their own code and images.
+There are four folders - one for each workflow - along with a central images folder.
 
 Ensure you have the required libraries -
 
@@ -13,12 +13,9 @@ pip install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn
 or 
 
 ```
-conda install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn xgboost kaleido
+conda install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn xgboost kaleido conda-forge shap
 ```
-and 
-```
-conda install -c conda-forge shap
-```
+
 refer to `https://xgboost.readthedocs.io/en/release_1.3.0/build.html` to figure out how to install xgboost on your system if it doesn't work.
 
 
@@ -26,19 +23,14 @@ refer to `https://xgboost.readthedocs.io/en/release_1.3.0/build.html` to figure 
 Original dataset (Used in Assignment-1) is saved as ```original.csv``` in the _data_ folder. The supplementary dataset is saved as ```supplementary.csv``` in the same location. The merged dataset ```base.csv```, which is used for the entire assignment, is created using the ```preproc.py``` file.
 
 ### Workflow 1
-run using python3 `final.py`. The images get saved to ```workflow_1/images/```. Note that it can take some time (a few minutes).
-For a more step by step and interactive experience, use the notebook i.e. `final.ipynb`
-try_stuff is just a bunch of rough work.
+Run using python3 `final.py` present in the ```workflow_1``` folder. The images get saved to ```images```. Note that it can take some time (a few minutes).
+For a more step by step and interactive experience, use the notebook `final.ipynb`.
 
 ### Workflow 2
 
 ### Workflow 3
 
-Run the ```workflow_3.py``` file in the ```workflow_3``` folder. The images get saved to ```workflow_3/images/```. Note that it can take some time (5-10 seconds) to complete running.
-
-```
-python3 workflow_3.py
-```
+Run the ```workflow_3.py``` file present in the ```workflow_3``` folder. The images get saved to ```images```. Note that it can take some time (10-15 seconds) to complete running.
 
 If you get the error
 
