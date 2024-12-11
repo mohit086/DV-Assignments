@@ -140,7 +140,7 @@ for i in range(len(viz1_df.columns)):
 
 # Adjust the layout to make it readable
 plt.subplots_adjust(wspace=1, hspace=0.5)
-fig.savefig(f'images/Fig{image_counter}.png')
+fig.savefig(f'../images/fig{image_counter}.png')
 image_counter += 1
 
 
@@ -210,7 +210,7 @@ for col in continuous_columns:
 
 # Adjust the layout for better spacing
 plt.subplots_adjust(hspace=1.0, wspace=1.0)
-fig.savefig(f'images/Fig{image_counter}.png')
+fig.savefig(f'../images/fig{image_counter}.png')
 image_counter += 1
 
 
@@ -360,7 +360,7 @@ for i, col in enumerate(numeric_columns):
     # break
 plt.tight_layout()
 # plt.subplots_adjust(hspace=1, wspace=1.5)
-fig.savefig(f'images/Fig{image_counter}.png')
+fig.savefig(f'../images/fig{image_counter}.png')
 image_counter += 1
 
 
@@ -395,8 +395,7 @@ fig = px.parallel_coordinates(
 
 # Show the plot
 plt.tight_layout()
-# fig.savefig(f'images/Fig{image_counter}.png')
-fig.write_image(f"images/Fig{image_counter}.png")
+fig.write_image(f"../images/fig{image_counter}.png")
 image_counter += 1
 
 
@@ -431,8 +430,7 @@ fig = px.parallel_coordinates(
 
 # Show the plot
 plt.tight_layout()
-# fig.savefig(f'images/Fig{image_counter}.png')
-fig.write_image(f"images/Fig{image_counter}.png")
+fig.write_image(f"../images/fig{image_counter}.png")
 image_counter += 1
 
 
@@ -566,7 +564,7 @@ for col in continuous_columns:
 
 # Adjust the layout for better spacing
 plt.subplots_adjust(hspace=0.5, wspace=0.5)
-fig.savefig(f'images/Fig{image_counter}.png')
+fig.savefig(f'../images/fig{image_counter}.png')
 image_counter += 1
 
 
@@ -765,7 +763,7 @@ for i, col in enumerate(numeric_columns):
 
 plt.tight_layout()
 # plt.subplots_adjust(hspace=1, wspace=1.5)
-fig.savefig(f'images/Fig{image_counter}.png')
+fig.savefig(f'../images/fig{image_counter}.png')
 image_counter += 1
 
 # ITER=1
@@ -795,7 +793,7 @@ shap.summary_plot(shap_values, x_validation, max_display=10, show=False)
 
 # Save the current plot as a PNG image
 fig_summary = plt.gcf()  # Get the current figure (matplotlib)
-fig_summary.savefig(f"images/Fig{image_counter}.png", format="png")
+fig_summary.savefig(f"../images/fig{image_counter}.png", format="png")
 image_counter += 1
 
 # 2. Feature Importance Bar Plot using Plotly
@@ -805,7 +803,7 @@ shap.summary_plot(shap_values, x_validation, plot_type="bar", show=False)
 
 # Save the current plot as a PNG image
 fig_bar = plt.gcf()  # Get the current figure (matplotlib)
-fig_bar.savefig(f"images/Fig{image_counter}.png", format="png")
+fig_bar.savefig(f"../images/fig{image_counter}.png", format="png")
 image_counter += 1
 
 # 3. Dependence Plot (For a specific feature, e.g., 'AnnualIncome') using Plotly
@@ -815,7 +813,7 @@ shap.dependence_plot('AnnualIncome', shap_values, x_validation, show=False)
 
 # Save the current plot as a PNG image
 fig_dependence = plt.gcf()  # Get the current figure (matplotlib)
-fig_dependence.savefig(f"images/Fig{image_counter}.png", format="png")
+fig_dependence.savefig(f"../images/fig{image_counter}.png", format="png")
 image_counter += 1
 
 
