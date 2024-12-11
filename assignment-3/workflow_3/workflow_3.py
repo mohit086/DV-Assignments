@@ -1,4 +1,3 @@
-import os
 import sys
 import squarify
 import numpy as np
@@ -13,7 +12,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 
 df = pd.read_csv('../data/base.csv')
-os.makedirs('images',exist_ok=True)
 
 # -----------------------------------------------------------------------------------------------
 
@@ -40,7 +38,7 @@ plt.figure(figsize=(12, 8))
 ax = plt.gca()
 squarify.plot(sizes=sizes, label=labels, color=colors, alpha=0.8, edgecolor='white', linewidth=3)
 plt.axis('off')
-plt.savefig('images/fig1.png', bbox_inches='tight')
+plt.savefig('../images/fig25.png', bbox_inches='tight')
 plt.close()
 
 # ----------------------------------------------------------------------------------------------------------
@@ -62,7 +60,7 @@ plt.figure(figsize=(12, 8))
 ax = plt.gca()
 squarify.plot(sizes=sizes, label=labels, color=colors, alpha=0.8, edgecolor='white', linewidth=3)
 plt.axis('off')
-plt.savefig('images/fig2.png', bbox_inches='tight')
+plt.savefig('../images/fig26.png', bbox_inches='tight')
 plt.close()
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -85,13 +83,13 @@ liabilities_ratio_counts = liabilities_ratio_category.value_counts().sort_index(
 
 plt.figure(figsize=(6, 6))
 plt.pie(savings_ratio_counts, labels=savings_labels, autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
-plt.savefig('images/fig3.png', bbox_inches='tight')
+plt.savefig('../images/fig27.png', bbox_inches='tight')
 plt.figure(figsize=(6, 6))
 plt.pie(credit_lines_counts, labels=credit_labels, autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
-plt.savefig('images/fig4.png', bbox_inches='tight')
+plt.savefig('../images/fig28.png', bbox_inches='tight')
 plt.figure(figsize=(6, 6))
 plt.pie(liabilities_ratio_counts, labels=liabilities_labels, autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)
-plt.savefig('images/fig5.png', bbox_inches='tight')
+plt.savefig('../images/fig29.png', bbox_inches='tight')
 plt.close()
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -165,7 +163,7 @@ fig.update_layout(
     annotations=annotations
 )
 
-fig.write_image("images/fig6.png")
+fig.write_image("../images/fig30.png")
 
 # ------------------------------------------------------------------------------------------------------------
 
@@ -209,7 +207,7 @@ for cluster in range(4):
     )
 
 plt.tight_layout()
-plt.savefig('images/fig7.png', bbox_inches='tight')
+plt.savefig('../images/fig31.png', bbox_inches='tight')
 
 fig, ax_scatter = plt.subplots(figsize=(6, 6))
 random_points = df.sample(50, random_state=42)
@@ -234,7 +232,7 @@ ax_scatter.set_xlabel("Credit Card Utilization Rate")
 ax_scatter.set_ylabel("Debt to Income Ratio")
 ax_scatter.legend()
 plt.tight_layout()
-plt.savefig('images/fig8.png', bbox_inches='tight')
+plt.savefig('../images/fig32.png', bbox_inches='tight')
 plt.close()
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -273,7 +271,7 @@ for cluster in range(4):
     )
     axes[cluster].set_ylim(0, max(approval_counts) + 2)
 plt.tight_layout()
-plt.savefig('images/fig9.png', bbox_inches='tight')
+plt.savefig('../images/fig33.png', bbox_inches='tight')
 plt.close()
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -299,7 +297,7 @@ ax.set_xlabel('Cluster', fontsize=12)
 ax.set_ylabel('Number of Loans', fontsize=12)
 ax.legend(['Loan Denied', 'Loan Approved'], title='Loan Status')
 plt.tight_layout()
-plt.savefig('images/fig10.png', bbox_inches='tight')
+plt.savefig('../images/fig34.png', bbox_inches='tight')
 plt.close()
 
 
@@ -331,7 +329,7 @@ ax.set_xlabel('Number of Loans', fontsize=14)
 ax.set_ylabel('Cluster', fontsize=14)
 ax.legend(['Loan Denied', 'Loan Approved'])
 plt.tight_layout()
-plt.savefig('images/fig11.png', bbox_inches='tight')
+plt.savefig('../images/fig35.png', bbox_inches='tight')
 plt.close()
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -359,8 +357,6 @@ risky_loans = df[df['BehaviouralRisk'] >= threshold]
 good_loans = df[df['BehaviouralRisk'] <= threshold2]
 denied_percentage = (risky_loans['LoanApproved'].value_counts(normalize=True).get(0) * 100)
 allowed_percentage = (good_loans['LoanApproved'].value_counts(normalize=True).get(1) * 100)
-# print(f"Percentage of loans denied for BehaviouralRisk above {threshold}: {denied_percentage:.2f}%")
-# print(f"Percentage of loans denied for BehaviouralRisk below {threshold2}: {allowed_percentage:.2f}%")
 
 # -------------------------------------------------------------------------------------------------------------------------
 
@@ -377,7 +373,7 @@ plt.title('BehaviouralRisk vs CreditScore', fontsize=16)
 plt.xlabel('CreditScore', fontsize=14)
 plt.ylabel('BehaviouralRisk', fontsize=14)
 plt.tight_layout()
-plt.savefig('images/fig12.png', bbox_inches='tight')
+plt.savefig('../images/fig36.png', bbox_inches='tight')
 plt.close()
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -395,7 +391,7 @@ plt.title('BehaviouralRisk vs CreditScore', fontsize=16)
 plt.xlabel('CreditScore', fontsize=14)
 plt.ylabel('BehaviouralRisk', fontsize=14)
 plt.tight_layout()
-plt.savefig('images/fig13.png', bbox_inches='tight')
+plt.savefig('../images/fig37.png', bbox_inches='tight')
 plt.close()
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -413,7 +409,7 @@ plt.title('BehaviouralRisk vs PaymentHistory', fontsize=16)
 plt.xlabel('PaymentHistory', fontsize=14)
 plt.ylabel('BehaviouralRisk', fontsize=14)
 plt.tight_layout()
-plt.savefig('images/fig14.png', bbox_inches='tight')
+plt.savefig('../images/fig38.png', bbox_inches='tight')
 plt.close()
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -425,7 +421,7 @@ plt.title('BehaviouralRisk vs Number of Open Credit Lines', fontsize=16)
 plt.xlabel('Number of Open Credit Lines', fontsize=14)
 plt.ylabel('BehaviouralRisk', fontsize=14)
 plt.tight_layout()
-plt.savefig('images/fig15.png', bbox_inches='tight')
+plt.savefig('../images/fig39.png', bbox_inches='tight')
 plt.close()
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -463,7 +459,7 @@ plt.barh(range(len(top_5_importances)), top_5_importances, align="center")
 plt.yticks(range(len(top_5_importances)), top_5_features)
 plt.xlabel("Relative Importance")
 plt.tight_layout()
-plt.savefig('images/fig16.png', bbox_inches='tight')
+plt.savefig('../images/fig40.png', bbox_inches='tight')
 plt.close()
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -485,7 +481,7 @@ sizes = [
 plt.figure(figsize=(8, 8))
 plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#66b3ff', '#ff6666', '#99ff99', '#ffcc99'])
 plt.axis('equal')
-plt.savefig('images/fig17.png', bbox_inches='tight')
+plt.savefig('../images/fig41.png', bbox_inches='tight')
 plt.close('all')
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -575,7 +571,7 @@ fig.update_layout(
     paper_bgcolor="white",
     annotations=annotations
 )
-fig.write_image("images/fig18.png")
+fig.write_image("../images/fig42.png")
 sys.exit(0)
 
 # --------------------------------------------------------------------------------------------------------------

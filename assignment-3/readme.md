@@ -2,7 +2,7 @@
 
 Repo link - https://github.com/mohit086/DV-Assignments/tree/main/assignment-3
 
-There are four folders - one for each workflow - along with a central images folder.
+There are five folders - one for each workflow - along with a central images folder and a data folder.
 
 Ensure you have the required libraries -
 
@@ -23,10 +23,12 @@ refer to `https://xgboost.readthedocs.io/en/release_1.3.0/build.html` to figure 
 Original dataset (Used in Assignment-1) is saved as ```original.csv``` in the _data_ folder. The supplementary dataset is saved as ```supplementary.csv``` in the same location. The merged dataset ```base.csv```, which is used for the entire assignment, is created using the ```preproc.py``` file.
 
 ### Workflow 1
-Run using python3 `final.py` present in the ```workflow_1``` folder. The images get saved to ```images```. Note that it can take some time (a few minutes).
-For a more step by step and interactive experience, use the notebook `final.ipynb`.
+Run using python3 `workflow_1.py` present in the ```workflow_1``` folder. The images get saved to ```images```. Note that it can take some time (a few minutes).
+For a more step by step and interactive experience, use the notebook `workflow_1.ipynb`.
 
 ### Workflow 2
+Run the ```workflow_2.py``` file present in the ```workflow_2``` folder. The images get saved to ```images```. Note that it can take some time (10-15 seconds) to complete running.
+For a more step by step and interactive experience, use the notebook `workflow_2.ipynb`.
 
 ### Workflow 3
 

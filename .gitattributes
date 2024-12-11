@@ -1,3 +1,0 @@
-*.nc filter=lfs diff=lfs merge=lfs -text
-assignment-2/data/*.nc filter=lfs diff=lfs merge=lfs -text
-assignment-2/sciviz/data/*.nc filter=lfs diff=lfs merge=lfs -text
