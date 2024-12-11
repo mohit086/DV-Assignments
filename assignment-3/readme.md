@@ -13,7 +13,7 @@ pip install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn
 or 
 
 ```
-conda install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn xgboost kaleido conda-forge shap
+conda install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn xgboost kaleido conda-forge shap scipy
 ```
 
 refer to `https://xgboost.readthedocs.io/en/release_1.3.0/build.html` to figure out how to install xgboost on your system if it doesn't work.
