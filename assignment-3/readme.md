@@ -7,13 +7,13 @@ There are three folders - one for each workflow - each with their own code and i
 Ensure you have the required libraries -
 
 ```
-pip install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn xgboost shap
+pip install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn xgboost shap kaleido
 ```
 
 or 
 
 ```
-conda install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn xgboost 
+conda install numpy pandas plotly squarify matplotlib imageio scikit-learn seaborn xgboost kaleido
 ```
 and 
 ```
