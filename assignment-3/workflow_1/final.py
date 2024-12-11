@@ -11,8 +11,12 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 import plotly.express as px
 from xgboost import XGBClassifier
 import shap
+import shap.plots
+import plotly.graph_objects as go
+import plotly.io as pio
 
 
+image_counter = 1  # the counter for figure names
 
 # EDA
 # gplom
@@ -136,7 +140,8 @@ for i in range(len(viz1_df.columns)):
 
 # Adjust the layout to make it readable
 plt.subplots_adjust(wspace=1, hspace=0.5)
-plt.savefig('images/Fig1.png')
+fig.savefig(f'images/Fig{image_counter}.png')
+image_counter += 1
 
 
 
@@ -205,7 +210,8 @@ for col in continuous_columns:
 
 # Adjust the layout for better spacing
 plt.subplots_adjust(hspace=1.0, wspace=1.0)
-plt.savefig('images/Fig2.png')
+fig.savefig(f'images/Fig{image_counter}.png')
+image_counter += 1
 
 
 # the gnb model
@@ -354,7 +360,8 @@ for i, col in enumerate(numeric_columns):
     # break
 plt.tight_layout()
 # plt.subplots_adjust(hspace=1, wspace=1.5)
-plt.savefig('images/Fig3.png')
+fig.savefig(f'images/Fig{image_counter}.png')
+image_counter += 1
 
 
 # here we will try using parallel coordinate plots
@@ -388,7 +395,9 @@ fig = px.parallel_coordinates(
 
 # Show the plot
 plt.tight_layout()
-fig.show()
+# fig.savefig(f'images/Fig{image_counter}.png')
+fig.write_image(f"images/Fig{image_counter}.png")
+image_counter += 1
 
 
 # here we will try using parallel coordinate plots
@@ -422,7 +431,9 @@ fig = px.parallel_coordinates(
 
 # Show the plot
 plt.tight_layout()
-fig.show()
+# fig.savefig(f'images/Fig{image_counter}.png')
+fig.write_image(f"images/Fig{image_counter}.png")
+image_counter += 1
 
 
 
@@ -555,7 +566,8 @@ for col in continuous_columns:
 
 # Adjust the layout for better spacing
 plt.subplots_adjust(hspace=0.5, wspace=0.5)
-plt.savefig('images/Fig4.png')
+fig.savefig(f'images/Fig{image_counter}.png')
+image_counter += 1
 
 
 
@@ -753,7 +765,8 @@ for i, col in enumerate(numeric_columns):
 
 plt.tight_layout()
 # plt.subplots_adjust(hspace=1, wspace=1.5)
-plt.savefig('images/Fig5.png')
+fig.savefig(f'images/Fig{image_counter}.png')
+image_counter += 1
 
 # ITER=1
 # for column in df.columns:
@@ -768,24 +781,45 @@ plt.savefig('images/Fig5.png')
 
 #use shapley to visualize the model
 
-# Initialize SHAP explainer for XGBoost
+
+
+
+
+
+# Initialize the SHAP TreeExplainer
 explainer = shap.TreeExplainer(best_model)
 
 # Get SHAP values for the validation set
 shap_values = explainer.shap_values(x_validation)
 
-# 1. Summary Plot (Feature importance)
-shap.summary_plot(shap_values, x_validation)
+# 1. Summary Plot (Feature importance) using Plotly
+# Use shap.summary_plot to get a plot and capture the figure object
+fig_summary = shap.summary_plot(shap_values, x_validation, max_display=10, show=False)
 
-# 2. Feature Importance Bar Plot
-shap.summary_plot(shap_values, x_validation, plot_type="bar")
+# Save the figure as a PNG image
+pio.write_image(fig_summary, f"images/Fig{image_counter}.png")
+image_counter += 1
 
-# 3. Dependence Plot (For a specific feature, e.g., 'AnnualIncome')
-shap.dependence_plot('AnnualIncome', shap_values, x_validation)
+# 2. Feature Importance Bar Plot using Plotly
+fig_bar = shap.summary_plot(shap_values, x_validation, plot_type="bar", show=False)
+
+# Save the figure as a PNG image
+pio.write_image(fig_bar, f"images/Fig{image_counter}.png")
+image_counter += 1
+
+# 3. Dependence Plot (For a specific feature, e.g., 'AnnualIncome') using Plotly
+fig_dependence = shap.dependence_plot('AnnualIncome', shap_values, x_validation, show=False)
+
+# Save the figure as a PNG image
+pio.write_image(fig_dependence, f"images/Fig{image_counter}.png")
+image_counter += 1
 
 
 
-plt.savefig('images/Fig6.png')
+
+# this can be used for further analysis #
+
+
 
 
 # now that we have our final model let;s see its performance in a few test scenarios to understand in what contexts it can be used and where it cannot be used.
